@@ -1,0 +1,41 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketStatusModel
+
+
+<form id="add-logtime-form" asp-controller="Definition" asp-action="EditTicketStatus"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Name_TR"]</label>
+                @Html.TextBoxFor(x => x.StatusName_TR, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.StatusName_TR)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Name_EN"]</label>
+                @Html.TextBoxFor(x => x.StatusName_EN, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.StatusName_EN)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Description_TR"]</label>
+                @Html.TextAreaFor(x => x.Description_TR, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Description_TR)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Description_EN"]</label>
+                @Html.TextAreaFor(x => x.Description_EN, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Description_EN)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Category"]</label>
+                <select asp-for="CategoryIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetTicketStatusCategories","General")" data-selected="@Model.CategoryIdx" style="width: 100%;"></select>
+                @Html.ValidationMessageFor(x => x.CategoryIdx)
+            </div>
+            <div class="form-group">
+                @Html.HiddenFor(x => x.Idx)
+                @Html.HiddenFor(x => x.InsertDate)
+                @Html.HiddenFor(x => x.InsertUserIdx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>

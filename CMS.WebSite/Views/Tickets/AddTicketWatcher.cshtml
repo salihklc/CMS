@@ -1,0 +1,41 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketWatchersModel
+
+<script type="text/javascript">
+  $(function () {
+
+    var users = [];
+
+    @foreach (var d in Model.SelectedUsers)
+    {
+        @:users.push(@d);
+    }
+        debugger;
+        console.log(users);
+        $('#SelectedUsers').val(users);
+        $('#SelectedUsers').trigger('change');
+    })
+</script>
+
+<form id="change-assignee-form" asp-controller="Tickets" asp-action="AddTicketWatcher"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">@SharedLocalizer["AddWatcher"]</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label>@SharedHtmlLocalizer["AssignUser"]</label>
+                    <select asp-for="SelectedUsers" class="form-control select2-ajax-data" data-selected="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedUsers)" 
+                            data-url="@Url.Action("GetTicketUsers","General")" style="width: 100%;"></select>
+                    @Html.ValidationMessageFor(x => x.SelectedUsers)
+                </div>
+                <div class="form-group">
+                    @Html.HiddenFor(x => x.TicketIdx)
+                    @Html.HiddenFor(x => x.UserIdx)
+                    <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

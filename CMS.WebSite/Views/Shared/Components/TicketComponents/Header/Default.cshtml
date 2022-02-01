@@ -1,0 +1,58 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketHeaderModel
+<div class="row">
+    <div class="col-md-2">
+        <div class="pull-left image">
+            <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="Firm Image">
+        </div>
+    </div>
+    <div class="col-md-4">
+        @Model.TicketHeader.Name
+    </div>
+</div>
+
+<div class="row">
+    @if (Model.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Comment_Ticket).AuthorizeUser)
+    {
+        <a class="btn btn-block btn-default">
+            <i class="fa fa-commenting"></i>  @SharedLocalizer["Comment"]
+        </a>
+    }
+    @if (Model.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Attach_Ticket).AuthorizeUser)
+    {
+        <a class="btn btn-block btn-default">
+            <i class="fa fa-file"></i> @SharedLocalizer["AttachFiles"]
+        </a>
+    }
+    @if (Model.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.ChangeState_Ticket).AuthorizeUser)
+    {
+        <a class="btn btn-block btn-default">
+            <i class="fa fa-users"></i>
+            @SharedLocalizer["ChangeAssignee"]
+        </a>
+    }
+    @if (Model.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.ChangeState_Ticket).AuthorizeUser)
+    {
+        <a class="btn btn-block btn-default">
+            <i class="fa fa-exchange"></i>
+            @SharedLocalizer["ChangeState"]
+        </a>
+    }
+    @if (Model.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.LogTime_Ticket).AuthorizeUser)
+    {
+        <a class="btn btn-block btn-default">
+            <i class="fa fa-hourglass-half"></i>
+            @SharedLocalizer["LogTime"]
+        </a>
+    }
+    @if (Model.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Reopen_Ticket).AuthorizeUser)
+    {
+        <a class="btn btn-block btn-default">
+            <i class="fa fa-refresh"></i>
+            @SharedLocalizer["ReopenTicket"]
+        </a>
+    }
+    <a class="btn btn-block btn-default" asp-action="ExportExcel" asp-controller="Tickets">
+        <i class="fas fa-file-excel"></i>
+        @SharedLocalizer["ExportToExcel"]
+    </a>
+</div>

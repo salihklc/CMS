@@ -1,0 +1,64 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketChangeStateModel
+
+
+<form id="change-state-form" asp-controller="Tickets" asp-action="ChangeTicketState"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Description"]</label>
+                @Html.TextAreaFor(x => x.Description, new { @class = "form-control wysihtml5" })
+                @Html.ValidationMessageFor(x => x.Description)
+            </div>
+
+            <div class="form-group">
+                <label>@SharedHtmlLocalizer["State"]</label>
+                <select asp-for="StatusIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetTicketStatus","General")" data-selected="@Model.StatusIdx"
+                        style="width: 100%;" onchange="ChangeState()"></select>
+                @Html.ValidationMessageFor(x => x.StatusIdx)
+            </div>
+            <div class="form-group">
+                <label>@SharedHtmlLocalizer["RequestType"]</label>
+                <select asp-for="TypeIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetTicketTypes","General")" data-selected="@Model.TypeIdx" style="width: 100%;"></select>
+                @Html.ValidationMessageFor(x => x.TypeIdx)
+            </div>
+            <div class="form-group">
+                <label for="SendMailtoCustomer">@SharedLocalizer["SendNotificationtoCustomer"]</label>
+                @Html.CheckBoxFor(r => r.SendMailtoCustomer)
+            </div>
+            <div class="form-group">
+                @Html.HiddenFor(x => x.TicketIdx)
+                @Html.HiddenFor(x => x.UserIdx)
+                @Html.HiddenFor(x => x.CategoryIdx)
+                <button type="submit" id="savebtn" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    function ChangeState() {
+        var statusIdx = $('#StatusIdx').val();
+        var ticketId = @Model.TicketIdx;
+        var url = '@Url.Action("CheckTicketClosable","Tickets")';
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data: {StatusIdx :statusIdx,TicketIdx : ticketId},
+            type: 'POST',
+            success: function (result) {
+                if (!result.IsSuccess) {
+                    Swal.fire(
+                        '@SharedLocalizer["FailureTransaction"]',
+                        result.Message,
+                        'error'
+                    );
+                    $('#savebtn').hide();
+                } else {
+                    $('#CategoryIdx').val(result.ExtraData);
+                    $('#savebtn').show();
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,104 @@
+﻿
+@section ExtensionCss{
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.min.css">
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">@SharedLocalizer["ProductFields"]</h3>
+                <div style="float:right;">
+                    <a type="button" class="btn btn-app btn-default" onclick="ExcelImportModal()">
+                        <i class="fas fa-file-excel"></i>
+                        @SharedLocalizer["AddFieldsWithExccel"]
+                    </a>
+                    <a class="btn btn-app pull-right" id="AddBtn">
+                        <i class="fa fa-plus"></i> @SharedLocalizer["AddFields"]
+                    </a>
+                </div>
+                <hr>
+                <div class="col-md-2">
+                    <a type="button" class="btn btn-block btn-default" asp-action="ExportFieldsExcel" asp-controller="Product">
+                        <i class="fas fa-file-excel"></i>
+                        @SharedLocalizer["ExportToExcel"]
+                    </a>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="box box-primary">
+                    <table id="user-table" class="table table-bordered table-striped table-hover default-datatable"
+                           data-server-uri='@Url.Action("_FieldsCallback","Product")'>
+                        <thead>
+                            <tr>
+                                <th data-column="Idx" data-option="C"
+                                    data-custom='<a class="btn btn-default btn-md" href="javascript:EditField({0})" data-toggle="tooltip" title="@SharedLocalizer["Edit"]"><i class="fa fa-edit"></i> </a>'
+
+                                    data-default-order="desc">@SharedLocalizer["Actions"]</th>
+                                    <th data-column="Name_TR" data-individual-search="true">@SharedLocalizer["Name"]</th>
+                                    <th data-column="Name_EN" data-orderable="false" data-individual-search="true">@SharedLocalizer["Name"]</th>
+                                    <th data-column="TypeName" data-orderable="true" data-individual-search="true">@SharedLocalizer["TypeName"]</th>
+                                    <th data-column="IsRequired" data-orderable="true" data-individual-search="true">@SharedLocalizer["IsRequired"]</th>
+                                    <th data-column="MaxLength" data-orderable="true" data-individual-search="true">@SharedLocalizer["MaxLength"]</th>
+                                    <th data-column="MinLength" data-orderable="true" data-individual-search="true">@SharedLocalizer["MinLength"]</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>@SharedLocalizer["Actions"]</th>
+                                    <th>@SharedLocalizer["Name"]</th>
+                                    <th>@SharedLocalizer["Name"]</th>
+                                    <th>@SharedLocalizer["TypeName"]</th>
+                                    <th>@SharedLocalizer["IsRequired"]</th>
+                                    <th>@SharedLocalizer["MaxLength"]</th>
+                                    <th>@SharedLocalizer["MinLength"]</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    @section ExtensionJS{
+
+    }
+
+    @section Scripts{
+        <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="~/js/dataTableInitialize.js"></script>
+        <script>
+        $(function () {
+
+        });
+      function ExcelImportModal() {
+
+        var ExcelImportModel = {
+            ExampleExcelPath:  '@Url.Action("DowloadExampleUserExcel","User")',
+            UploadExcelPath:   '@Url.Action("DowloadExampleUserExcel","User")',
+            PostExcelFileUrl : '@Url.Action("UploadUsersFromExcel","User")'
+        }
+        console.log(ExcelImportModel);
+        var url = '@Url.Action("ExcelImport","General")';
+        OpenModalPost(url,ExcelImportModel);
+            }
+
+            $('#AddBtn').on("click", function () {
+                var url = '@Url.Action("AddFields","Product")';
+                OpenModal(url);
+            });
+            function EditField(Idx) {
+                var url = '@Url.Action("EditFields","Product")?Idx=' + Idx;
+                OpenModal(url);
+            }
+        </script>
+
+
+    }

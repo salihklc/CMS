@@ -1,0 +1,16 @@
+<head>
+    <meta charset="utf-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title> @SharedLocalizer["CompanyAndCrmName"] - @ViewData["AdminTitle"]</title>
+
+    @RenderSection("ExtensionCss", required: false)
+
+    @{Html.RenderPartial("~/Views/Shared/_HeadMainCss.cshtml");}
+    <link href="~/lib/iCheck/all.css" rel="stylesheet" />
+    <script type="text/javascript" language="javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+<body class="hold-transition login-page">
+    <script src="~/lib/iCheck/icheck.js"></script>
+    @RenderBody()
+</body>

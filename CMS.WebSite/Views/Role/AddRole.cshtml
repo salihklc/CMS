@@ -1,0 +1,27 @@
+﻿@model CMS.Common.Models.ViewModels.Roles.CreateRoleModel
+@{
+    ViewData["Title"] = @SharedLocalizer["AddRole"];
+}
+<form id="create-role-form" asp-controller="Role" asp-action="AddRole"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>Rol Adı</label>
+                @Html.TextBoxFor(x => x.RoleName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.RoleName)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["RolDefinition"]</label>
+
+                  @Html.TextAreaFor(x => x.Description, new { @class = "form-control" })
+
+                  @Html.ValidationMessageFor(x => x.Description)
+
+</div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+</div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,73 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketChangeInfoModel
+
+
+<form id="change-assignee-form" asp-controller="Tickets" asp-action="ChangeTicketInfos"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">@SharedLocalizer["ChangeTicketInfos"]</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label>@SharedLocalizer["Firm"]</label>
+                    <select asp-for="FirmIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetFirms","General")" data-selected="@Model.FirmIdx" onchange="FirmChange()" style="width: 100%;"></select>
+                    @Html.ValidationMessageFor(x => x.FirmIdx)
+                </div>
+                <div class="form-group" id="FirmUsers" style="display:none">
+                    <label>@SharedLocalizer["FirmUsers"]</label>
+                    <select asp-for="FirmUserIdx" class="form-control select2" style="width: 100%;"></select>
+                    @Html.ValidationMessageFor(x => x.FirmUserIdx)
+                </div>
+                <div class="form-group">
+                    <label>@SharedHtmlLocalizer["RequestType"]</label>
+                    <select asp-for="TypeIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetTicketTypes","General")" data-selected="@Model.TypeIdx" style="width: 100%;"></select>
+                    @Html.ValidationMessageFor(x => x.TypeIdx)
+                </div>
+                <div class="form-group">
+                    <label>@SharedHtmlLocalizer["Priority"]</label>
+                    <select asp-for="PriorityIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetPriorities","General")" data-selected="@Model.PriorityIdx" style="width: 100%;"></select>
+                    @Html.ValidationMessageFor(x => x.PriorityIdx)
+                </div>
+                <div class="form-group">
+                    <label>@SharedHtmlLocalizer["EstimatedTime"]</label>
+                    <div class='input-group date'>
+                        <input type='number' asp-for="EstimatedTime" class="form-control" placeholder="@SharedHtmlLocalizer["Hour"]" min="0" step="0.01" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(x => x.EstimatedTime)
+                </div>
+                <div class="form-group">
+                    @Html.HiddenFor(x => x.Idx)
+                    @Html.HiddenFor(x => x.UserIdx)
+                    <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+     function FirmChange() {
+        var firmIdx = $('#FirmIdx').val();
+               $('#FirmUserIdx')
+            .find('option')
+            .remove()
+            .end();
+        var url = '@Url.Action("GetTicketFirmUsers","General")?firmIdx=' + firmIdx;
+         console.log(url);
+          $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    $('#FirmUserIdx').append(new Option(result[i].Value, result[i].Idx),result[i].Idx == @Model.FirmUserIdx);                 
+                }
+            }
+                });
+           $('#FirmUsers').show();
+    }
+</script>

@@ -1,0 +1,31 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketLabelsChangeModel
+
+
+<form id="change-label-form" asp-controller="Tickets" asp-action="ChangeLabelTicket"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">@SharedLocalizer["ChangeLabels"]</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label>@SharedHtmlLocalizer["TicketLabels"]</label>
+                    <select class="form-control select2" multiple="multiple" data-placeholder="Seçiniz"
+                            style="width: 100%;" asp-for="SelectedLabel">
+                        @foreach (var label in Model.TicketLabels)
+                        {
+                        <option value="@label.Idx"> <span class="@label.Class">@label.Name_TR</span></option>
+                        }
+                    </select>
+                   
+                </div>
+                <div class="form-group">
+                    @Html.HiddenFor(x => x.TicketIdx)
+                
+                    <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

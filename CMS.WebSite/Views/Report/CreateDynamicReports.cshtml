@@ -1,0 +1,42 @@
+@model CMS.Common.Models.ViewModels.Reports.DynamicReportModel
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">@SharedLocalizer["CreateDynamicReport"]</h3>
+            </div>
+            <div class="box-body">
+                <div class="box box-primary">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@SharedLocalizer["ReportName"]</label>
+                                <input type="text" class="form-control" id="ReportName" name="ReportName" />
+                            </div>
+                            <div class="form-group">
+                                <label>@SharedLocalizer["Description"]</label>
+                                <input type="text" class="form-control" id="Description" name="Description" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="form-group">
+                                <label>@SharedLocalizer["ReportSql"]</label>
+                                <input type="textarea" class="form-control" id="ReportSql" name="ReportSql"/>
+                            </div>
+                            <div class="form-group">
+                                <label>@SharedLocalizer["Parameters"]</label>
+                                <input type="text" class="form-control" id="Parameters" name="Parameters"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" type="submit" class="btn btn-block btn-success btn-flat">@SharedLocalizer["Save"]</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

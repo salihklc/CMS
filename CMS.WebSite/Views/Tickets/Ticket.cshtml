@@ -1,0 +1,39 @@
+﻿@model int
+@{
+    ViewData["Title"] = "Ticket";
+}
+<script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="~/js/dataTableInitialize.js"></script>
+
+@section ExtensionCss{
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.min.css">
+}
+
+<section class="content">
+    <input type="hidden" id="TicketIdx" value="@Model"/>
+    <div class="row">
+        <div class="col-md-8">
+            @await Component.InvokeAsync("Details", Model)
+
+            @await Component.InvokeAsync("Attachments", Model)
+
+            @await Component.InvokeAsync("TicketActivities", Model)
+
+            @await Component.InvokeAsync("TicketRelatedIssues", Model)
+
+        </div>
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-3">
+
+            @await Component.InvokeAsync("TicketPeople", Model)
+
+            @await Component.InvokeAsync("TicketDates", Model)
+
+            @await Component.InvokeAsync("TicketRecommendedActions", Model)
+
+        </div>
+    </div>
+</section>

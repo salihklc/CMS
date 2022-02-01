@@ -1,0 +1,275 @@
+﻿@model CMS.Common.Models.ViewModels.Users.CreateUserModel
+@{
+    ViewData["Title"] = @SharedLocalizer["CreateNewUser"];
+}
+<h1>@SharedLocalizer["CreateNewUser"]</h1>
+<form id="create-user-form" asp-controller="User" asp-action="Create"
+      method="post" role="form" class="ajax-form" data-isModal="true" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">@SharedLocalizer["AccountInfo"] Hesap Bilgileri</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+
+                    <div class="form-group">
+                        <label>@SharedLocalizer["FirstName"]</label>
+                        @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.FirstName)
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>@SharedLocalizer["LastName"]</label>
+                        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.LastName)
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Email"]</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-mail-forward"></i>
+                            </div>
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+
+                        </div>
+                        @Html.ValidationMessageFor(x => x.Email)
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Password"]</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                            @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+
+                        </div>
+                        @Html.ValidationMessageFor(x => x.Password)
+                    </div>
+
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Phone"]</label>
+
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            @Html.TextBoxFor(x => x.Phone, new { @class = "form-control", @data_inputmask = "'mask':'(999) 999-9999'" })
+
+                        </div>
+                        @Html.ValidationMessageFor(x => x.Phone)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["MobilePhone"]</label>
+
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            @Html.TextBoxFor(x => x.Gsm, new { @class = "form-control", @data_inputmask = "'mask':'(999) 999-9999'" })
+
+                        </div>
+                        @Html.ValidationMessageFor(x => x.Gsm)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Status"]</label>
+                        <select class="form-control select2" style="width: 100%;">
+                            <option selected="selected">@SharedLocalizer["Active"]</option>
+                            <option>@SharedLocalizer["Passive"]</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="file-loading">
+                            <input id="kv-explorer" type="file" name="PictureData"
+                                   data-browse-on-zone-click="true" data-show-upload="false">
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box box-info">
+                <div class="box-header">
+                    <h3 class="box-title">@SharedLocalizer["PersonelInfos"]</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- Date dd/mm/yyyy -->
+                    <div class="form-group">
+                        <label>@SharedLocalizer["BirthDate"]</label>
+
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(x => x.DateOfBirth, new { @class = "form-control datepicker", @data_inputmask = "'alias':'dd/mm/yyyy'" })
+                            @Html.ValidationMessageFor(x => x.DateOfBirth)
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <!-- /.form group -->
+                    <!-- Date mm/dd/yyyy -->
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Address"]</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-address-card"></i>
+                            </div>
+                            @Html.TextAreaFor(x => x.Address, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Address)
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <!-- /.form group -->
+                    <!-- phone mask -->
+                    <div class="form-group">
+                        <label>@SharedHtmlLocalizer["City"]</label>
+                        <select asp-for="CityNo" class="form-control select2-ajax-data" data-url="@Url.Action("GetCitiesSelect","General")" onchange="CityChange(this,$('#DistrictNo'),0)" style="width: 100%;"></select>
+                        @Html.ValidationMessageFor(x => x.CityNo)
+                    </div>
+                    <div class="form-group" id="DistrictSelect" style="display:none">
+                        <label>@SharedHtmlLocalizer["District"]</label>
+                        <select asp-for="DistrictNo" class="form-control select2-ajax-data" data-url="@Url.Action("GetDistrictsSelect","General")" style="width: 100%;"></select>
+                        @Html.ValidationMessageFor(x => x.DistrictNo)
+                    </div>
+
+                    @*@await Component.InvokeAsync("City", new { name = "CityNo", selectedCityNo = 1 })*@
+
+                    @*@await Component.InvokeAsync("District", new { name = "DistrictNo", selecteddistrictNo = 0 ,cityNo=1})*@
+                    <!-- /.form group -->
+                    <!-- /.form group -->
+                    <!-- IP mask -->
+                    <div class="form-group">
+                        <label>@SharedLocalizer["DefaultLanguage"]</label>
+                        <select asp-for="DefaultLanguage" class="form-control select2" style="width: 100%;">
+                            <option value="TR" selected="selected">Türkçe (TR)</option>
+                            <option value="EN">İngilizce (EN)</option>
+                        </select>
+                        @Html.ValidationMessageFor(x => x.DefaultLanguage)
+                    </div>
+                    <!-- /.form group -->
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+            <div class="box box-success">
+                <div class="box-header">
+                    <h3 class="box-title">@SharedLocalizer["CompanyInfos"]</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Firm"]</label>
+                        <select asp-for="FirmIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetFirms","General")" style="width: 100%;"></select>
+                        @Html.ValidationMessageFor(x => x.FirmIdx)
+
+                    </div>
+                    @*<div class="form-group">
+                        <label>@SharedLocalizer["Job"]</label>
+                        <select asp-for="JobIdx" class="form-control select2" style="width: 100%;">
+                            <option value="0" selected="selected">Seçiniz</option>
+                            <option value="1">Bilgisayar Mühendisi</option>
+                            <option value="2">Bilgisayar Teknisyeni</option>
+                        </select>
+                        @Html.ValidationMessageFor(x => x.JobIdx)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Department"]</label>
+                        <select class="form-control select2" style="width: 100%;">
+                            <option selected="selected">IT</option>
+                            <option>IK</option>
+                            <option>Muhasebe</option>
+                            <option>Teknik Servis</option>
+                        </select>
+                    </div>*@
+                    <!-- /.form group -->
+                    @*<div class="form-group">
+                            <label>@SharedLocalizer["Role's"]</label>
+                            <select class="form-control select2" multiple="multiple" data-placeholder="Seçiniz"
+                                    style="width: 100%;" asp-for="SelectedRoles">
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <option value="@role.Idx">@role.RoleName</option>
+                                }
+                            </select>
+                        </div>*@
+                    <div class="form-group">
+                        <label>@SharedHtmlLocalizer["Role's"]</label>
+                        <select asp-for="SelectedRoles" class="form-control select2-ajax-data" multiple="multiple" data-url="@Url.Action("GetRoles","General")" style="width: 100%;"></select>
+                        @Html.ValidationMessageFor(x => x.SelectedRoles)
+                    </div>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </div>
+        <!-- /.col (left) -->
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-block btn-success btn-flat">@SharedLocalizer["Save"]</button>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            language: 'tr-TR'
+        });
+
+
+        $("#kv-explorer").fileinput({
+            'theme': 'explorer-fas',
+            overwriteInitial: false,
+            showUpload: false,
+            maxFileCount: 1,
+            initialPreviewAsData: true
+        });
+    });
+     function CityChange() {
+    $('#DistrictNo')
+        .find('option')
+        .remove()
+        .end();
+    $('#DistrictSelect').show();
+    var cityNo = $('#CityNo').val();
+    $.ajax({
+        type: 'GET',
+        url: "@Url.Action("GetDistricts","General")?cityNo=" + cityNo,
+        success: function (resultData) {
+            debugger;
+            for (var i = 0; i < resultData.length; i++) {
+                $('#DistrictNo').append(new Option(resultData[i].DistrictName, resultData[i].DistrictNo));
+            }
+        }
+    });
+}
+</script>

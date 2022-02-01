@@ -1,0 +1,42 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketReopenModel
+
+
+<form id="reopen-ticket-form" asp-controller="Tickets" asp-action="ReOpenTicket"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Description"]</label>
+                @Html.TextAreaFor(x => x.Description, new { @class = "form-control wysihtml5" })
+                @Html.ValidationMessageFor(x => x.Description)
+            </div>
+            <div class="form-group">
+                <div class="file-loading">
+                    <input id="Files" type="file" name="Attachments" data-browse-on-zone-click="true" data-show-upload="false" multiple>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Priority"]</label>
+                <select asp-for="PriorityIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetPriorities","General")" style="width: 100%;"></select>
+                @Html.ValidationMessageFor(x => x.PriorityIdx)
+            </div>
+            <div class="form-group">
+                @Html.HiddenFor(x => x.TicketIdx)
+                @Html.HiddenFor(x => x.UserIdx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+      $(document).ready(function () {
+        $("#Files").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '@Url.Action("UploadFiles","Tickets")',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+
+        });
+    });
+</script>

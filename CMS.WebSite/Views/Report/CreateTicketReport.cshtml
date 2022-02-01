@@ -1,0 +1,100 @@
+﻿<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">@SharedLocalizer["Firms"]</h3>
+            </div>
+            <div class="box-body">
+                <div class="box box-primary">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@SharedLocalizer["FirmName"]</label>
+                                <select id="Firm" class="form-control select2-ajax-data" data-url="@Url.Action("GetFirms","General")" style="width: 100%;"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>@SharedLocalizer["StartDate"]</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right datepicker" id="startDate">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>@SharedLocalizer["RequestType"]</label>
+                                <select id="TypeIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetTicketTypes","General")" style="width: 100%;"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@SharedLocalizer["TicketNumber"]</label>
+                                <input type="text" class="form-control" id="TicketNumber" />
+                            </div>
+                            <div class="form-group">
+                                <label>@SharedLocalizer["EndDate"]</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right datepicker" id="endDate">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>@SharedLocalizer["Priority"]</label>
+                                <select id="PriorityIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetPriorities","General")" style="width: 100%;"></select>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="searchbtn" onclick="GetFirmTickets()" class="btn btn-block btn-success btn-flat">@SharedLocalizer["Search"]</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tickets">
+
+</div>
+
+<script type="text/javascript">
+    function GetFirmTickets() {
+        var firmIdx = $('#Firm').val();
+        var filterModel = {
+            FirmIdx: firmIdx,
+            StartDate: $('#StartDate').val(),
+            EndDate: $('#EndDate').val(),
+            PriorityIdx: $('#PriorityIdx').val(),
+            TypeIdx: $('#TypeIdx').val(),
+            TicketNumber:$('#TicketNumber').val(),
+        }
+        debugger;
+        $.ajax({
+            type: 'POST',
+            data: {model:filterModel},
+            url: '@Url.Action("TicketReport", "Report")',
+            success: function (resultData) {
+            debugger;
+            $('#tickets').html(resultData);
+
+        },
+        error: function (xhr, status, error) {
+            var errorMessage = xhr.status + ': ' + xhr.statusText
+            console.log(errorMessage);
+            if (xhr.status == 403) {
+                Swal.fire(
+                    "Başarısız",
+                    "Bu İşlemi Yapmaya Yetkiniz Bulunmamaktadır.",
+                    'error'
+                )
+            }
+            else if (xhr.status != 200) {
+                CookieTimeOut();
+            }
+        }
+    });
+
+    }
+</script>

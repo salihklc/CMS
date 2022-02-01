@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+@model CMS.Common.Models.ViewModels.Home.HomeCountersModel
+
+      <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>@Model.FirmCount</h3>
+
+              <p>Firma Sayısı</p>
+            </div>
+          <div class="icon">
+              <i class="ion ion-briefcase"></i>
+            </div>
+            <a asp-action="Index" asp-controller="Firms" class="small-box-footer"> <i class="fa fa-arrow-circle-right"></i> @SharedLocalizer["ShowDetail"] </a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>@Model.ProductCount </h3>
+
+              <p>Ürün Sayısı</p>
+            </div>
+              <div class="icon">
+              <i class="ion ion-bag"></i>
+            </div>
+            
+            <a asp-action="Products" asp-controller="Product" class="small-box-footer"> <i class="fa fa-arrow-circle-right"></i> @SharedLocalizer["ShowDetail"] </a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>@Model.UserCount</h3>
+              <p>Kullanıcı Sayısı</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a asp-action="Index" asp-controller="Users" class="small-box-footer"> <i class="fa fa-arrow-circle-right"></i> @SharedLocalizer["ShowDetail"] </a>
+
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3>@Model.TicketCount</h3>
+              <p>Çözüm Bekleyen İşler</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-android-mail"></i>
+            </div>
+            <a asp-action="Index" asp-controller="Tickets" class="small-box-footer"> <i class="fa fa-arrow-circle-right"></i> @SharedLocalizer["ShowDetail"] </a>
+          </div>
+        </div>
+        <!-- ./col -->
+      </div>
+    @section Scripts{
+        <script src="~/lib/chart.js/Chart.js"></script>
+    }

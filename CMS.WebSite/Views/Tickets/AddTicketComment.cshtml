@@ -1,0 +1,44 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketCommentsModel
+
+
+<form id="add-comment-form" asp-controller="Tickets" asp-action="AddTicketComment"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Comment"]</label>
+                @Html.TextAreaFor(x => x.Comment, new { @class = "form-control wysihtml5" })
+                @Html.ValidationMessageFor(x => x.Comment)
+            </div>
+            <div class="form-group">
+                <div class="file-loading">
+                    <input id="commentfile" type="file" name="Attachments" data-browse-on-zone-click="true" data-show-upload="false" multiple>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="SendMailtoCustomer">@SharedLocalizer["SendNotificationtoCustomer"]</label>
+                @Html.CheckBoxFor(r=> r.SendMailtoCustomer)
+             
+            </div>
+
+
+            <div class="form-group">
+                @Html.HiddenFor(x => x.TicketIdx)
+                @Html.HiddenFor(x => x.InsertUserIdx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+      $(document).ready(function () {
+        $("#commentfile").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '@Url.Action("UploadFiles","Tickets")',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+
+        });
+    });
+</script>

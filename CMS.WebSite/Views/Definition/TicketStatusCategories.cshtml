@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "TicketStatusCategories";
+}
+
+<section class="content-header">
+    <h1>
+        @SharedLocalizer["TicketStatusCategories"]
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-default">
+        <div class="box-header">
+            <h3 class="box-title"></h3>
+            <div style="float:right;">
+                <a class="btn btn-app pull-right" id="AddBtn">
+                    <i class="fa fa-plus"></i> @SharedLocalizer["AddStatusCategories"]
+                </a>
+            </div>
+            <hr>
+            <div class="col-md-2">
+                <a type="button" class="btn btn-block btn-default" asp-action="ExportTicketTypesExcel" asp-controller="Definition">
+                    <i class="fas fa-file-excel"></i>
+                    @SharedLocalizer["ExportToExcel"]
+                </a>
+            </div>
+        </div>
+        <div class="box-body">
+            <table id="user-table" class="table table-bordered table-striped table-hover default-datatable"
+                data-server-uri='@Url.Action("_TicketStatusCategoriesCallBack","Definition")'>
+                <thead>
+                    <tr>
+                        <th data-column="Idx" data-option="DC"
+                            data-delete-url='@Url.Action("DeleteTicketStatusCategories","Definition")'
+                            data-custom='<a class="btn btn-default btn-md" href="javascript:EditLabel({0})" data-toggle="tooltip" title="@SharedLocalizer["Edit"]"><i class="fa fa-edit"></i> </a>'
+                            data-default-order="desc">İşlemler</th>
+                        <th data-column="Idx" data-individual-search="true">@SharedLocalizer["Id"]</th>
+                        <th data-column="StatusCategoryName_TR" data-orderable="false" data-individual-search="true">@SharedLocalizer["Name_TR"]</th>
+                        <th data-column="StatusCategoryName_EN" data-orderable="false" data-individual-search="true">@SharedLocalizer["Name_EN"]</th>
+                        <th data-column="Description_TR" data-orderable="false" data-individual-search="true">@SharedLocalizer["Description_TR"]</th>
+                        <th data-column="Description_EN" data-orderable="false" data-individual-search="true">@SharedLocalizer["Description_EN"]</th>
+                        <th data-column="Status_Desc" data-orderable="false" data-individual-search="true">@SharedLocalizer["Status"]</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>@SharedLocalizer["Operations"]</th>
+                        <th>@SharedLocalizer["Id"]</th>
+                        <th>@SharedLocalizer["Name_TR"]</th>
+                        <th>@SharedLocalizer["Name_EN"]</th>
+                        <th>@SharedLocalizer["Description_TR"]</th>
+                        <th>@SharedLocalizer["Description_EN"]</th>
+                        <th>@SharedLocalizer["Status"]</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<script src="~/js/dataTableInitialize.js"></script>
+<script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+@section ExtensionCss{
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.min.css">
+}
+
+<script type="text/javascript">
+    function EditLabel(Id) {
+
+        var url = '@Url.Action("EditTicketStatusCategories","Definition")/' + Id;
+        OpenModal(url)
+    }
+
+    $('#AddBtn').on("click", function () {
+        var url = '@Url.Action("AddTicketStatusCategories","Definition")';
+        OpenModal(url);
+    })
+</script>

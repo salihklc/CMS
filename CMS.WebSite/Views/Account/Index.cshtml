@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = @SharedLocalizer["LogIn"];
+}
+@model CMS.Common.Models.ViewModels.Accounts.LoginUserModel
+
+<div class="login-box">
+    <div class="login-logo">
+        <img src="~/img/logo/cms.png" />
+        <b>My Cms</b>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">@SharedLocalizer["SignInToStartYourSession"]</p>
+      
+        <form asp-action="Index" asp-controller="Account" method="post" id="accountForm">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <div class="form-group has-feedback">
+               
+                <input asp-for="Email" type="email" class="form-control" placeholder="@SharedLocalizer["Email"]">
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input asp-for="Password" type="password" class="form-control" placeholder="@SharedLocalizer["Password"]">
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+
+            </div>
+            <div class="row">
+
+
+                <button type="submit" class="btn btn-primary btn-block btn-flat">@SharedLocalizer["SignIn"]</button>
+
+</div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="checkbox icheck">
+                        <label>
+                            <input asp-for="RememberMe" type="checkbox"> @SharedLocalizer["RememberMe"]
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="pull-right">
+                        <a href="#"> @SharedLocalizer["ForgotPassword"]</a>
+
+</div>
+
+
+                </div>
+            </div>
+
+        </form>
+
+
+    </div>
+    <!-- /.login-box-body -->
+</div>
+
+<script>
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' /* optional */
+        });
+    });
+</script>
+

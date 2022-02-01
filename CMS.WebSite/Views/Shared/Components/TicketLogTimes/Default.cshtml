@@ -1,0 +1,68 @@
+﻿@model List<CMS.Common.Models.ViewModels.Tickets.TicketLogTimesModel>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#logtime-table').DataTable({
+            'paging': true,
+            'lengthChange': false,
+            'searching': false,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        });
+    });
+       function UpdateTicketLogTimes(ticketID, logId) {
+        var url = '@Url.Action("AddTicketLogTimes","Tickets")?Id=' + ticketID + '&LogId=' + logId;
+       OpenModal(url);
+    }
+ 
+</script>
+
+
+
+
+<table id="logtime-table" class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>@SharedLocalizer["Number"]</th>
+            <th>@SharedLocalizer["InsertDate"]</th>
+            <th>@SharedLocalizer["User"]</th>
+            <th>@SharedLocalizer["Time"]</th>
+            <th>@SharedLocalizer["Comment"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var logtime in Model)
+        {
+            <tr>
+                <td>
+                    @if (logtime.UserIdx == Convert.ToInt32(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value))
+                    {
+                        <a class="btn btn-default btn-md" href="#" onclick="UpdateTicketLogTimes(@logtime.TicketIdx,@logtime.Idx)" data-toggle="tooltip" title="@SharedLocalizer["Update"]"><i class="fa fa-edit"></i> </a>
+                        <a class="btn btn-default btn-md" href="@Url.Action("AddTicketLogTimes","Tickets", new { Id = logtime.TicketIdx , LogId = logtime.Idx})" data-toggle="tooltip" title="@SharedLocalizer["Delete"]"><i class="fa fa-remove"></i> </a>
+
+                    }
+                </td>
+                <td>@logtime.Idx</td>
+                <td>@logtime.InsertDate.ToShortDateString()</td>
+                <td>@logtime.UserModel.FirstName @logtime.UserModel.LastName</td>
+                <td>@logtime.LogTime</td>
+                <td>@Html.Raw(logtime.Comment)</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>@SharedLocalizer["Actions"]</th>
+            <th>@SharedLocalizer["No"]</th>
+            <th>@SharedLocalizer["InsertDate"]</th>
+            <th>@SharedLocalizer["User"]</th>
+            <th>@SharedLocalizer["Time"]</th>
+            <th>@SharedLocalizer["Comment"]</th>
+        </tr>
+    </tfoot>
+</table>
+
+

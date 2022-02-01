@@ -1,0 +1,14 @@
+﻿@model CMS.Common.Models.ViewModels.Cities.DistrictViewModel
+<div class="form-group">
+    <label for="@Model.PageModelName" class="control-label">@SharedLocalizer["District"]</label>
+    <select id="@Model.PageModelName" name="@Model.PageModelName" class="form-control select2">
+        @foreach (var district in Model.Districts)
+        {
+            <option value="@district.DistrictNo" selected="@(Model.SelectedDistrictNo == district.DistrictNo ? "Selected" : "")">@district.DistrictName</option>
+        }
+    </select>
+    <span for="@Model.PageModelName" class="text-danger"></span>
+</div>
+
+
+

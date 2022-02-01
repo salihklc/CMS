@@ -1,0 +1,109 @@
+﻿@model List<CMS.Common.Models.ViewModels.Tickets.TicketRelatedIssues>
+
+<div class="row">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title">@SharedLocalizer["RelatedTickets"]</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>@SharedLocalizer["TicketName"]</th>
+                            <th>@SharedLocalizer["AssigneeUser"]</th>
+                            <th>@SharedLocalizer["Status"]</th>
+                            <th>@SharedLocalizer["Progress"]</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var ticketRelated in Model)
+                        {
+                            <tr>
+                                <td>1.</td>
+                                <td><a href="@Url.Action("Ticket","Tickets",new { Idx = ticketRelated.RelatedTicketIdx})">@ticketRelated.RelatedTicket.Name</a></td>
+                                <td>@ticketRelated.AssigneeUser.FirstName @ticketRelated.AssigneeUser.LastName</td>
+                                <td>@ticketRelated.TicketStatus.StatusName_TR</td>
+                                <td>
+                                    <div class="progress progress-xs">
+                                        @if (ticketRelated.TicketStatus.CategoryIdx == 1)
+                                        {
+                                            <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
+                                        }
+                                        else if (ticketRelated.TicketStatus.CategoryIdx == 2)
+                                        {
+                                            <div class="progress-bar progress-bar-info" style="width: 60%"></div>
+                                        }
+                                        else if (ticketRelated.TicketStatus.CategoryIdx == 3)
+                                        {
+                                            <div class="progress-bar progress-bar-info" style="width: 100%"></div>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default pull-left" onclick="DeleteRelatedTicket(@ticketRelated.Idx)"><i class="fa fa-eraser"></i>Sil</button>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-default pull-left" onclick="AddRelatedTicket()"><i class="fa fa-plus"></i> İlişkili Ticket Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function AddRelatedTicket() {
+        var Id = $('#TicketIdx').val();
+        var url = '@Url.Action("AddRelatedTicket","Tickets")/' + Id;
+        OpenModal(url);
+    }
+    function DeleteRelatedTicket(Id) {
+        var url = '@Url.Action("DeleteRelatedTicket","Tickets")'
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: { Idx: Id },
+            success: function (resultData) {
+                if (resultData.IsSuccess) {
+                      Swal.fire(
+                        "Başarılı.",
+                        "İşlem Başarılıdır.",
+                        'success'
+                    )
+                } else {
+                     Swal.fire(
+                        "Başarısız",
+                        "İşlem Başarısızdır.",
+                        'error'
+                    )
+                }
+                  
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                console.log(errorMessage);
+                if (xhr.status == 403) {
+                    Swal.fire(
+                        "Başarısız",
+                        "Bu İşlemi Yapmaya Yetkiniz Bulunmamaktadır.",
+                        'error'
+                    )
+                }
+                else if (xhr.status != 200) {
+                      CookieTimeOut();
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,66 @@
+﻿@model List<CMS.Common.Models.ViewModels.Tickets.TicketHistoriesModel>
+    <!-- The timeline -->
+    <ul class="timeline timeline-inverse">
+
+
+        @foreach (var histories in Model)
+        {
+            <!-- timeline item -->
+            <li>
+                <i class="fa  fa-pencil-square-o bg-blue"></i>
+
+                <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> @histories.InsertDate.ToString()</span>
+
+                    <h3 class="timeline-header"><a href="#">@histories.User.FirstName @histories.User.LastName</a> @SharedLocalizer["Updated"]</h3>
+
+                    <div class="timeline-body">
+                        <table id="history-table" class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>@SharedLocalizer["Number"]</th>
+                                    <th>@SharedLocalizer["InsertDate"]</th>
+                                    <th>@SharedLocalizer["User"]</th>
+                                    <th>@SharedLocalizer["CurrentAssiggneeUser"]</th>
+                                    <th>@SharedLocalizer["NewAssiggneeUser"]</th>
+                                    <th>@SharedLocalizer["CurrentState"]</th>
+                                    <th>@SharedLocalizer["NewState"]</th>
+                                    <th>@SharedLocalizer["Description"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                           
+                                <tr>
+                                    <td>@histories.Idx</td>
+                                    <td>@histories.InsertDate.ToShortDateString()</td>
+                                    <td><a href="@Url.Action()">@histories.User.FirstName @histories.User.LastName</a></td>
+                                    @if (histories.CurrentAssigneeUser.FirstName == null)
+                                    {
+                                        <td><a href="@Url.Action()">-</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td><a href="@Url.Action()">@histories.CurrentAssigneeUser.FirstName @histories.CurrentAssigneeUser.LastName</a></td>
+                                    }
+
+                                    <td><a href="@Url.Action()">@histories.NewAssigneeUser.FirstName @histories.NewAssigneeUser.LastName</a></td>
+                                    <td>@histories.CurrentTicketStatusModel.StatusName_TR</td>
+                                    <td>@histories.NewTicketStatusModel.StatusName_TR</td>
+                                    <td>@Html.Raw(histories.Description)</td>
+                                </tr>
+                                
+                            </tbody>
+
+                        </table>
+                    </div>
+                    
+                </div>
+            </li>
+            <!-- END timeline item -->
+        }
+
+
+        <li>
+            <i class="fa fa-clock-o bg-gray"></i>
+        </li>
+    </ul>

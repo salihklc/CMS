@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Error";
+    var errors = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>(ViewData["ErrorViewModel"].ToString());
+}
+
+<h1 class="text-danger">Hata.</h1>
+<h2 class="text-danger">Beklenmedik bir hata ile karşılaşıldı. Lütfen sistem yönetici ile ileişime geçiniz.</h2>
+
+@if (errors.Environment == "Development")
+{
+    <p>
+        <strong>Request ID ve Zaman:</strong> <code>@errors.RequestId    --      @DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss")</code>
+    </p>
+
+    <p>
+        <strong>Hata:</strong> <code> @errors.Error </code>
+    </p>
+
+    <p>
+        <strong>Hatalar </strong> <code>@errors.ModelStateErrors</code> 
+    </p>
+
+    <p>
+        <strong>Gerçekteştiği Yerler </strong> <code>@errors.StackTrace</code> 
+    </p>
+}else{
+    <p> Hatanın gerçekleştiği zaman : @DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss")</p>
+}
+
+<h3>@errors.Environment</h3>
+<p>
+    Sistemi <strong>Geliştirme</strong> moduna alarak detayları görüntüleyebilirsiniz.
+</p>

@@ -1,0 +1,40 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketLogTimesModel
+
+
+<form id="add-logtime-form" asp-controller="Tickets" asp-action="AddTicketLogTimes"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Comment"]</label>
+                @Html.TextAreaFor(x => x.Comment, new { @class = "form-control wysihtml5" })
+                @Html.ValidationMessageFor(x => x.Comment)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Time"]</label>
+                <div class='input-group date' id='datetimepicker3'>
+                    <input type='number' asp-for="LogTime" class="form-control" placeholder="@SharedHtmlLocalizer["Hour"]" min="0" step="0.01" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                    @Html.ValidationMessageFor(x => x.LogTime)
+                </div>
+            </div>
+            <div class="form-group">
+                <label>@SharedHtmlLocalizer["WorkingTypes"]</label>
+                <select asp-for="WorkingTypeIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetWorkingTypes","General")" style="width: 100%;"></select>
+                @Html.ValidationMessageFor(x => x.WorkingTypeIdx)
+            </div>
+
+
+            <div class="form-group">
+                @Html.HiddenFor(x => x.TicketIdx)
+                @Html.HiddenFor(x => x.InsertUserIdx)
+                @Html.HiddenFor(x => x.Idx)
+                @Html.HiddenFor(x => x.InsertDate)
+                @Html.HiddenFor(x => x.UserIdx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>

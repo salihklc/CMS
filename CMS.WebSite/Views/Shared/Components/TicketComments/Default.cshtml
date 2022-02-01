@@ -1,0 +1,47 @@
+﻿
+@model  List<CMS.Common.Models.ViewModels.Tickets.TicketCommentsModel>
+
+<ul class="timeline timeline-inverse">
+    @foreach (var comment in Model)
+    {
+        <!-- timeline item -->
+        <li>
+            <i class="fa fa-comments bg-yellow"></i>
+
+            <div class="timeline-item">
+                <span class="time"><i class="fa fa-clock-o"></i> @comment.InsertDate</span>
+
+                <h3 class="timeline-header"><a href="#">@comment.InsertedUser.FirstName @comment.InsertedUser.LastName</a> @SharedLocalizer["CommentedOnYourPost"]</h3>
+
+                <div class="timeline-body">
+                    @Html.Raw(comment.Comment)
+                    @if (comment.TicketAttachments.Count() > 0)
+                    {
+                        <ul class="">
+                            @foreach (var attachment in comment.TicketAttachments)
+                            {
+                                <li class="">
+                                    <span> <i class="fa fa-paperclip"></i> <a asp-action="DownloadAttachment" asp-controller="Tickets" asp-route-Idx="@attachment.Idx" target="_blank">@attachment.AttachmentName</a> </span>
+                                </li>
+
+                            }
+                        </ul>
+
+                    }
+                </div>
+
+            </div>
+        </li>
+        <!-- END timeline item -->
+    }
+
+
+
+    <li>
+        <i class="fa fa-clock-o bg-gray"></i>
+    </li>
+
+    <a class="btn btn-default pull-right" onclick="AddTicketComment()" >
+        <i class="fa fa-commenting"></i>  @SharedLocalizer["AddComment"]
+    </a>
+</ul>

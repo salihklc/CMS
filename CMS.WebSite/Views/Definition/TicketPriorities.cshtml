@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewData["Title"] = "TicketPriorities";
+}
+
+<section class="content-header">
+    <h1>
+        @SharedLocalizer["TicketPriorities"]
+    </h1>
+</section>
+<section class="content">
+    <div class="box box-default">
+        <div class="box-header">
+            <div class="box-title"></div>
+            <a class="btn btn-app pull-right" id="AddLabel">
+                <i class="fa fa-plus"></i> @SharedLocalizer["AddPriority"]
+            </a>
+            <br />
+        </div>
+        <div class="box-body"> 
+            <table id="user-table" class="table table-bordered table-striped table-hover default-datatable"
+                data-server-uri='@Url.Action("_TicketPrioritiesCallBack","Definition")'>
+                <thead>
+                    <tr>
+                        <th data-column="Idx" data-option="DC"
+                            data-delete-url='@Url.Action("DeleteTicketPriority","Definition")'
+                            data-custom='<a class="btn btn-default btn-md" href="javascript:EditLabel({0})" data-toggle="tooltip" title="@SharedLocalizer["Edit"]"><i class="fa fa-edit"></i> </a>'
+                            data-default-order="desc">İşlemler</th>
+                        <th data-column="Idx" data-individual-search="true">@SharedLocalizer["Id"]</th>
+                        <th data-column="Name_TR" data-orderable="false" data-individual-search="true">@SharedLocalizer["Name_TR"]</th>
+                        <th data-column="Name_EN" data-orderable="false" data-individual-search="true">@SharedLocalizer["Name_EN"]</th>
+                        <th data-column="Description_TR" data-orderable="false" data-individual-search="true">@SharedLocalizer["Description_TR"]</th>
+                        <th data-column="Description_EN" data-orderable="false" data-individual-search="true">@SharedLocalizer["Description_EN"]</th>
+                        <th data-column="Status_Desc" data-orderable="false" data-individual-search="true">@SharedLocalizer["Status"]</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>@SharedLocalizer["Operations"]</th>
+                        <th>@SharedLocalizer["Id"]</th>
+                        <th>@SharedLocalizer["Name_TR"]</th>
+                        <th>@SharedLocalizer["Name_EN"]</th>
+                        <th>@SharedLocalizer["Description_TR"]</th>
+                        <th>@SharedLocalizer["Description_EN"]</th>
+                        <th>@SharedLocalizer["Status"]</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</section>
+
+<script src="~/js/dataTableInitialize.js"></script>
+<script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+@section ExtensionCss{
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.min.css">
+}
+<script type="text/javascript">
+    function EditLabel(Id) {
+
+        var url = '@Url.Action("EditTicketPriority","Definition")/' + Id;
+        OpenModal(url)
+    }
+
+    $('#AddLabel').on("click", function () {
+        var url = '@Url.Action("AddTicketPriority","Definition")';
+        OpenModal(url);
+    })
+</script>

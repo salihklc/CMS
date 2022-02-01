@@ -1,0 +1,49 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketsModel
+
+<div class="row">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">@SharedLocalizer["Dates"]</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4">@SharedLocalizer["Created"]</label>
+                            <span>@Model.InsertDate.ToString()</span>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4">@SharedLocalizer["Updated"]</label>
+                            <span>@Model.UpdateDate</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4">@SharedLocalizer["Resolved"]</label>
+                            <span>@Model.DueDate</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4">@SharedLocalizer["StartDate"]</label>
+                            <span>@Model.StartDate</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4">@SharedLocalizer["DueDate"]</label>
+                            <span>@Model.DueDate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.AttachmentListModel
+
+<div class="row">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title">@SharedLocalizer["Attachments"]</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="file-loading">
+                <input id="kv-explorer" type="file"  data-browse-on-zone-click="true" multiple>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        debugger;
+        var attachmentsUrl = @Json.Serialize(Model.TicketAttachmentsModels.Select(k => ("<img src='data:image/png;base64, "+k.AttachmentThumb+"' alt=''/>")));
+        var attachmentsConfig = @Json.Serialize(Model.TicketAttachmentsModels.Select(k => new { caption = k.AttachmentName, size = k.FileSize ,downloadUrl= Url.Action("DownloadAttachment","Tickets",new {Idx = k.Idx}),width = "120px", url = Url.Action("DeleteAttachment", "Tickets", new { Idx = k.Idx }), key = k.Idx }));
+       
+        $("#kv-explorer").fileinput({
+            'theme': 'explorer-fas',        
+            'showUpload': true,
+            overwriteInitial: false,
+            initialPreviewAsData: false,
+            initialPreview: attachmentsUrl,
+            initialPreviewDownloadUrl: true,
+            initialPreviewConfig: attachmentsConfig,
+            uploadUrl: "@Url.Action("UploadTicketAttachments","Tickets")",
+            uploadAsync: false,
+            uploadExtraData: {
+            TicketIdx: "@Model.TicketIdx",
+         
+        }
+        });
+    });
+        $("#kv-explorer").on("filepredelete", function(jqXHR) {     
+        var abort = true;
+        if (confirm("Emin misiniz")) {
+            abort = false;
+        }
+        return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+    });
+   
+</script>

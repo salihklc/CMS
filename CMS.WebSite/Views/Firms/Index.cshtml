@@ -1,0 +1,111 @@
+﻿
+<script src="~/js/dataTableInitialize.js"></script>
+<script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+@section ExtensionCss{
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.min.css">
+}
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">@SharedLocalizer["Firms"]</h3>
+                <div style="float:right;">
+                    <a class="btn btn-app pull-right" id="AddBtn">
+                        <i class="fa fa-plus"></i> @SharedLocalizer["AddFirm"]
+                    </a>
+                    <a type="button" class="btn btn-app btn-default" onclick="ExcelImportModal()">
+                        <i class="fas fa-file-excel"></i>
+                        @SharedLocalizer["AddFirmWithExcel"]
+                    </a>
+                </div>
+                <hr>
+                <div class="col-md-2">
+                    <a type="button" class="btn btn-block btn-default" asp-action="ExportExcel" asp-controller="Firms">
+                        <i class="fas fa-file-excel"></i>
+                        @SharedLocalizer["ExportToExcel"]
+                    </a>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="box box-primary">
+                    <table id="user-table" class="table table-bordered table-striped table-hover default-datatable"
+                           data-server-uri='@Url.Action("_FirmsCallBack","Firms")'>
+                        <thead>
+                            <tr>
+                                <th data-column="Idx" data-option="DC"
+                                      data-delete-url='@Url.Action("Delete","Firms")'
+                                    data-custom='<a class="btn btn-default btn-md" href="javascript:EditFirm({0})" data-toggle="tooltip" title="@SharedLocalizer["Edit"]"><i class="fa fa-edit"></i> </a><a class="btn btn-default btn-md" href="javascript:AddUserExcel({0})" data-toggle="tooltip" title="@SharedLocalizer["AddUserExcel"]"><i class="fas fa-file-excel"></i> </a><a class="btn btn-default btn-md" href="javascript:Products({0})" data-toggle="tooltip" title="@SharedLocalizer["Products"]"><i class="fas fa-cubes"></i> </a>'
+                                        data-default-order="desc">İşlemler</th>
+                                <th data-column="Idx" data-individual-search="true">@SharedLocalizer["Id"]</th>
+                                <th data-column="FirmName" data-orderable="false" data-individual-search="true">@SharedLocalizer["FirmName"]</th>
+                                <th data-column="TaxNo" data-orderable="false" data-individual-search="true">@SharedLocalizer["TaxNo"]</th>
+                                <th data-column="Gsm" data-orderable="false" data-individual-search="true">@SharedLocalizer["Gsm"]</th>
+                                <th data-column="Email" data-orderable="false" data-individual-search="true">@SharedLocalizer["Email"]</th>
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>@SharedLocalizer["Operations"]</th>
+                                <th>@SharedLocalizer["Id"]</th>
+                                <th>@SharedLocalizer["FirmName"]</th>
+                                <th>@SharedLocalizer["TaxNo"]</th>
+                                <th>@SharedLocalizer["Gsm"]</th>
+                                <th>@SharedLocalizer["Email"]</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<script type="text/javascript">
+    function Products(Id) {
+        var url = '@Url.Action("FirmProducts", "Firms")?FirmIdx=' + Id;
+        window.location.href = url;
+    }
+
+    function EditFirm(Id) {
+
+        var url = '@Url.Action("EditFirm","Firms")/' + Id;
+        OpenModal(url);
+    }
+
+    $('#AddBtn').on("click", function () {
+        var url = '@Url.Action("AddFirm","Firms")';
+        OpenModal(url);
+    })
+    function ExcelImportModal() {
+    
+        var ExcelImportModel = {
+            ExampleExcelPath:  '@Url.Action("DowloadExampleFirmExcel","Firms")',
+            UploadExcelPath: '@Url.Action("DowloadExampleFirmExcel","Firms")',
+            PostExcelFileUrl: '@Url.Action("UploadFirmsFromExcel","Firms")'
+        }
+        console.log(ExcelImportModel);
+        var url = '@Url.Action("ExcelImport","General")';
+        OpenModalPost(url,ExcelImportModel);
+    }
+
+    function AddUserExcel(Id) {
+         var ExcelImportModel = {
+            ExampleExcelPath:  '@Url.Action("DowloadExampleUserExcel","User")',
+            UploadExcelPath:   '@Url.Action("DowloadExampleUserExcel","User")',
+            PostExcelFileUrl : '@Url.Action("UploadUsersFromExcel","User")',
+            ExtraData:Id
+        }
+        console.log(ExcelImportModel);
+        var url = '@Url.Action("ExcelImport","General")';
+        OpenModalPost(url,ExcelImportModel);
+    }
+</script>

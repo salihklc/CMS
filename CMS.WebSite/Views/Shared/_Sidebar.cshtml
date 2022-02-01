@@ -1,0 +1,196 @@
+@{
+    CMS.Common.Models.ViewModels.Users.UserModel AuthUser;
+    if(ViewBag.AuthUser != null){
+        AuthUser = ViewBag.AuthUser as CMS.Common.Models.ViewModels.Users.UserModel;
+    }
+    else {
+        AuthUser = new CMS.Common.Models.ViewModels.Users.UserModel();
+    }
+
+    var Permissions = AuthUser.Permissions;
+    var UserPermissions = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CMS.Common.Models.ViewModels.Permission.Permission>>(Permissions);
+    //var AuthUser = ViewBag.AuthUser as CMS.Common.Models.ViewModels.Users.UserModel;
+
+
+}
+
+<!-- Left side column. contains the sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="data:image/png;base64,@AuthUser.PictureThumb" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p>@AuthUser.FirstName @AuthUser.LastName</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> @SharedLocalizer["Online"]</a>
+            </div>
+        </div>
+        <!-- search form -->
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" id="sidebar-search-q" class="form-control" placeholder="@SharedLocalizer["Search..."]">
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul id="sidebar-menu-search-result"></ul>
+        <ul class="sidebar-menu" data-widget="tree" id="sidebar-menu-container">
+            <li class="header">@SharedLocalizer["MainNavigation"]</li>
+            
+            @* <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-tachometer-alt"></i> <span>@SharedLocalizer["Dashboard"]</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="../../index.html"><i class="fa fa-circle"></i> @SharedLocalizer["Dashboard"] v1</a></li>
+                    <li><a href="../../index2.html"><i class="fa fa-circle"></i> @SharedLocalizer["Dashboard"] v2</a></li>
+                </ul>
+            </li> *@
+
+
+
+            <li>
+                <a asp-action="Index" asp-controller="Tickets" class="Tickets-Index">
+                    <i class="fa fa-envelope"></i> <span>@SharedLocalizer["TicketMenu"]</span>
+                    <span class="pull-right-container">
+                        @*<small class="label pull-right bg-yellow">12</small>
+                        <small class="label pull-right bg-green">16</small>
+                        <small class="label pull-right bg-red">5</small>*@
+                    </span>
+                </a>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-cogs"></i> <span>@SharedLocalizer["Definition"]</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_User))
+                    {
+                        <li><a asp-action="Users" asp-controller="User" class="User-Users User-Create User-Edit"><i class="fa fa-users"></i>@SharedLocalizer["Users"]</a></li>
+                    }
+                    @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_Role))
+                    {
+                        <li><a class="Role-Index Role-Create Role-Edit" asp-controller="Role" asp-action="Index"><i class="fa fa-user-tag"></i>@SharedLocalizer["Roles"]</a></li>
+                    }
+                    @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Definitons_Ticket))
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-share"></i> <span> @SharedLocalizer["TicketDefinitions"]</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_TicketLabel))
+                                {
+                                    <li><a class="Definition-TicketLabels" asp-action="TicketLabels" asp-controller="Definition"><i class="fa fa-circle"></i>@SharedLocalizer["TicketLabels"]</a></li>
+                                }
+                                @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_TicketPriorities))
+                                {
+                                    <li><a class="Definition-TicketPriorities" asp-action="TicketPriorities" asp-controller="Definition"><i class="fa fa-circle"></i> @SharedLocalizer["TicketPriorities"]</a></li>
+                                }
+                                @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_TicketTypes))
+                                {
+                                    <li><a class="Definition-TicketTypes" asp-action="TicketTypes" asp-controller="Definition"><i class="fa fa-circle"></i> @SharedLocalizer["TicketTypes"]</a></li>
+                                }
+                                @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_TicketStatusCategories))
+                                {
+                                    <li><a class="Definition-TicketStatusCategories" asp-action="TicketStatusCategories" asp-controller="Definition"><i class="fa fa-circle"></i> @SharedLocalizer["TicketStatusCategories"]</a></li>
+                                }
+                                @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_TicketStatus))
+                                {
+                                    <li><a class="Definition-TicketStatus" asp-action="TicketStatus" asp-controller="Definition"><i class="fa fa-circle"></i> @SharedLocalizer["TicketStatus"]</a></li>
+                                }
+                                @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_WorkingTypes))
+                                {
+                                    <li><a class="Definition-WorkingTypes" asp-action="WorkingTypes" asp-controller="Definition"><i class="fa fa-circle"></i> @SharedLocalizer["WorkingTypes"]</a></li>
+                                }
+                            </ul>
+
+                        </li>
+                    }
+
+
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fas fa-building"></i> <span>@SharedLocalizer["Firms"]</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_Firms))
+                {
+            <ul class="treeview-menu">
+                <li><a href="@Url.Action("Index", "Firms")" class="Firms-Index"><i class="fa fa-circle"></i> @SharedLocalizer["Firms"]</a></li>
+                <li><a href="@Url.Action("FirmProducts", "Firms")" class="Firms-FirmProducts"><i class="fa fa-circle"></i> @SharedLocalizer["FirmProducts"]</a></li>
+                <li><a href="@Url.Action("FirmTickets", "Firms")" class="Firms-FirmTickets"><i class="fa fa-circle"></i> @SharedLocalizer["FirmTickets"]</a></li>
+            </ul>
+                    
+                   
+                 
+                }
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fas fa-cart-arrow-down"></i> <span>@SharedLocalizer["Products"]</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_Fields))
+                    {
+                        <li><a href="@Url.Action("Fields", "Product")" class="Product-Fields"><i class="fa fa-circle"></i> @SharedLocalizer["ProductFields"]</a></li>
+                    }
+                    @if (UserPermissions.Any(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Read_Products))
+                    {
+                        <li><a href="@Url.Action("Products", "Product")" class="Product-Products"><i class="fa fa-circle"></i> @SharedLocalizer["Products"]</a></li>
+                    }
+                </ul>
+
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fas fa-cart-arrow-down"></i> <span>@SharedLocalizer["Reports"]</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#">Ticket Reports</a></li>
+                </ul>
+            </li>
+            <li><a href="@Url.Action("Logs","Log")" class="Log-Logs">
+                <i class="fas fa-notes-medical"></i> <span>@SharedLocalizer["Logs"]</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            </li>
+            @* <li class="header">@SharedLocalizer["MyTickets"]</li>
+            <li><a href="#"><i class="fa fa-circle text-red"></i> <span>Üzerimdeki İşler</span></a></li>
+            <li><a href="#"><i class="fa fa-circle text-yellow"></i> <span>Bekleyen İşler</span></a></li>
+            <li><a href="#"><i class="fa fa-circle text-aqua"></i> <span>İşler</span></a></li> *@
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

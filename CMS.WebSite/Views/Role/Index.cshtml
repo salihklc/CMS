@@ -1,0 +1,226 @@
+﻿@model CMS.Common.Models.ViewModels.Roles.RolesWithPermissions
+
+@{
+    ViewData["Title"] = @SharedLocalizer["RolesAndPermissions"];
+}
+
+<h1>@SharedLocalizer["RolesAndPermissions"]</h1>
+
+<form id="create-role-form" asp-controller="Role" asp-action="AddRolePermission"
+      method="post" role="form" class="ajax-form" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-app pull-right" id="AddRole">
+                <i class="fa fa-plus"></i> @SharedLocalizer["AddNewRole"]
+            </a>
+            <div class="form-group">
+                <label asp-for="RoleIdx">@SharedHtmlLocalizer["Roles"]</label>
+
+                <select class="form-control select2" style="width: 100%;" asp-for="RoleIdx">
+                    <option value="0" selected="selected">@SharedLocalizer["SelectARole"]</option>
+                    @foreach (var role in Model.RoleViewModels)
+                    {
+                        <option value="@role.Idx">@role.RoleName</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @foreach (var pages in Model.RolePermissions.GroupBy(k => new { Id = k.Page.Idx, Name = k.Page.PageName }))
+            {
+                <div class="box"  id="Div_Page_@pages.Key.Id">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3 class="box-title">@pages.Key.Name</h3>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="switch">
+                                    <input type="checkbox" id="page_@pages.Key.Id" class="page_check" data-headerpage="@pages.Key.Id">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    @foreach (var permission in Model.RolePermissions.Where(k => k.Page.Idx == pages.Key.Id))
+                    {
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @permission.PermissionName
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="switch">
+                                        <input type="checkbox" id="permission_@permission.PermissionNo" class="perm" data-permissionNo="@permission.PermissionNo" data-page="@pages.Key.Id">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    @permission.Description
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    <!-- box-footer -->
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <!-- /.box -->
+    <div class="row">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-block btn-success btn-flat" onclick="SavePermissions()">@SharedLocalizer["Save"]</button>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    $('#RoleIdx').change(function () {
+        $(".perm").each(function () {
+            $(this).prop('checked', false);
+        })
+
+        if (this.value != 0) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetRolePermissions","Role")/' + this.value,
+                success: function (resultData) {
+                    debugger;
+                    var permissions = resultData[0].RolePermissions;
+                    for (var i = 0; i < permissions.length; i++) {
+                        $('#permission_' + permissions[i].PermissionNo).prop('checked', true);
+                    }
+
+                    $('.page_check').each(function () {
+                        var pageid = $(this).data().headerpage;
+                        setCheckStates(pageid);
+                    });
+                }
+            });
+
+        }
+
+
+
+    });
+
+    $('#AddRole').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: "@Url.Action("AddRole","Role")",
+            success: function (resultData) {
+                debugger;
+                $('#modalBody').html(resultData);
+                $('#myModal').modal();
+            }
+        });
+
+
+    });
+
+    function SavePermissions() {
+
+        var rolePermissions = {
+            RoleIdx: $('#RoleIdx').val(),
+            RolePermissions: new Array()
+        }
+
+        $('.perm').each(function () {
+            if ($(this).prop('checked')) {
+                rolePermissions.RolePermissions.push({ PermissionNo: $(this).data().permissionno });
+            }
+        });
+
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("AddRolePermission","Role")",
+            context: "json",
+            data: { rolesWithPermissions: rolePermissions },
+            success: function (resp) {
+                if (resp.IsSuccess) {
+                    Swal.fire(
+                        resp.Message,
+                        resp.Message,
+                        'success'
+                    )
+                } else {
+                    Swal.fire(
+                        resp.Message,
+                        resp.Message,
+                        'error'
+                    )
+                }
+            },
+            error: function (e) {
+                debugger;
+                if (e.status === 401) {
+                    Swal.fire(
+                        'Yetkiniz Bulunmamaktadır!',
+                        'Hata',
+                        'error'
+                    )
+                } else if (e.status === 403) {
+                    Swal.fire(
+                        'Yetkiniz Bulunmamaktadır!',
+                        'Hata',
+                        'error'
+                    )
+                }
+              
+            }
+        });
+    }
+
+    $('.page_check').on('change', function () {
+        console.log('yes sir!');
+        debugger;
+        var pageid = $(this).data().headerpage;
+        var pagecheck = $(this).prop('checked');
+        $('#Div_Page_' + pageid).addClass("box-success");
+        $('*[data-page=' + pageid + ']').each(function () {
+            $(this).prop('checked', pagecheck);
+        });
+    });
+
+    $('.perm').on('change', function () {
+        var pageid = $(this).data().page;
+        setCheckStates(pageid);
+    });
+
+    function setCheckStates(pageid) {
+        var allpagechecked = true;
+        var leastOneChecked = false;
+        $('*[data-page=' + pageid + ']').each(function () {
+            if (!$(this).prop('checked')) {
+                allpagechecked = false;
+            } else {
+                leastOneChecked = true;
+            }
+        });
+
+        if (allpagechecked) {
+            $('#page_' + pageid).prop('checked', true);
+            $('#Div_Page_' + pageid).removeClass("box-warning").addClass("box-success");
+        } else if (leastOneChecked) {
+            $('#Div_Page_' + pageid).removeClass("box-success").addClass("box-warning");
+            $('#page_' + pageid).prop('checked', false);
+        } else {
+            $('#Div_Page_' + pageid).removeClass("box-success").removeClass("box-warning");
+            $('#page_' + pageid).prop('checked', false);
+        }
+    }
+
+</script>
+

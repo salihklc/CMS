@@ -1,0 +1,46 @@
+﻿@model CMS.Common.Models.ViewModels.Products.FieldsModel
+
+
+<form id="add-comment-form" asp-controller="Product" asp-action="AddFields"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Name_TR"]</label>
+                @Html.TextBoxFor(x => x.Name_TR, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Name_TR)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Name_EN"]</label>
+                @Html.TextBoxFor(x => x.Name_EN, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Name_EN)
+            </div>
+            <div class="form-group">
+                <label>@SharedHtmlLocalizer["FieldType"]</label>
+                <select asp-for="TypeIdx" class="form-control select2-ajax-data" data-selected="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.TypeIdx)"
+                        data-url="@Url.Action("GetFieldTypes","General")" style="width: 100%;"></select>
+                @Html.ValidationMessageFor(x => x.TypeIdx)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["IsRequired"]</label>
+                @Html.CheckBoxFor(x => x.IsRequired)
+                @Html.ValidationMessageFor(x => x.IsRequired)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["MaxLength"]</label>
+                @Html.TextBoxFor(x => x.MaxLength, new { @class = "form-control", @type = "number" })
+                @Html.ValidationMessageFor(x => x.MaxLength)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["MinLength"]</label>
+                @Html.TextBoxFor(x => x.MinLength, new { @class = "form-control", @type = "number" })
+                @Html.ValidationMessageFor(x => x.MinLength)
+            </div>
+            <div class="form-group">
+                @Html.HiddenFor(x => x.InsertUserIdx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>
+

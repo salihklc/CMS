@@ -1,0 +1,58 @@
+﻿@model CMS.Common.Models.ViewModels.Cities.CitiesViewModel
+<div class="form-group">
+    <label for="@Model.PageModelName" class="control-label">@SharedLocalizer["City"]</label>
+    <select id="@Model.PageModelName" name="@Model.PageModelName" class="form-control select2 city">
+        @foreach (var city in Model.Cities)
+        {
+            <option value="@city.CityNo" selected="@(Model.SelectedCityNo == city.CityNo ? "Selected" : "")">@city.CityName</option>
+        }
+    </select>
+    <span for="@Model.PageModelName" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label for="DistrictNo" class="control-label">@SharedLocalizer["District"]</label>
+    <select id="DistrictNo" name="DistrictNo" class="form-control select2">
+        @if (Model.SelectedCityNo == 0)
+        {
+        <option value="0" selected>@SharedLocalizer["SelectCityPlease"]!</option>
+        }
+        else
+        {
+            @foreach (var district in Model.Districts.Districts)
+            {
+                <option value="@district.DistrictNo" selected="@(Model.Districts.SelectedDistrictNo == district.DistrictNo ? "Selected" : "")">@district.DistrictName</option>
+            }
+        }
+
+
+    </select>
+    <span for="DistrictNo" class="text-danger"></span>
+</div>
+
+<script type="text/javascript">
+    $('.city').change(function () {
+        $('#DistrictNo')
+            .find('option')
+            .remove()
+            .end();
+
+        var selectedDistrictNo = @(Model.Districts.SelectedDistrictNo)
+      $.ajax({
+            type: 'GET',
+            url: "/General/GetDistricts?cityNo=" + this.value,
+            success: function (resultData) {
+                debugger;
+                for (var i = 0; i < resultData.length; i++) {
+                    $('#DistrictNo').append(new Option( resultData[i].DistrictName,resultData[i].DistrictNo,selectedDistrictNo == resultData[i].DistrictNo));
+                    //$('#DistrictNo').append(' <option value=' + resultData[i].DistrictNo + ' selected = ' + (selectedDistrictNo == resultData[i].DistrictNo ? "Selected" : "") + '' > + resultData[i].DistrictName +'</option > ')
+
+                }
+            
+
+            }
+        });
+    });
+
+</script>
+

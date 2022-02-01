@@ -1,0 +1,21 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketDescriptionModel
+
+
+<form id="change-description-form" asp-controller="Tickets" asp-action="ChangeTicketDescription"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Description"]</label>
+                @Html.TextAreaFor(x => x.Description, new { @class = "form-control wysihtml5" })
+                @Html.ValidationMessageFor(x => x.Description)
+            </div>
+
+            <div class="form-group">
+                @Html.HiddenFor(x => x.TicketIdx)
+                @Html.HiddenFor(x => x.UserIdx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>

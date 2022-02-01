@@ -1,0 +1,36 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketDatatableModel
+
+<script src="~/js/dataTableInitialize.js"></script>
+<script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+@section ExtensionCss{
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.min.css">
+}
+
+<table id="user-table" class="table table-bordered table-striped table-hover default-datatable"
+       data-server-uri='@Model.CallBackUrl' data-tickettable="true">
+    <thead>
+        <tr>
+            <th data-column="Idx" data-option="U"
+                data-edit-url='@Model.EditUrl'
+                data-default-order="desc">İşlemler</th>
+            <th data-column="TicketNumber" data-individual-search="true">TicketNumber</th>
+            <th data-column="Name" data-orderable="false" data-individual-search="true">@SharedLocalizer["Name"]</th>
+         
+            <th data-column="FirmName" data-orderable="false" data-individual-search="true">@SharedLocalizer["FirmName"]</th>
+            <th data-column="FirmUserName" data-orderable="false" data-individual-search="true">@SharedLocalizer["FirmUserName"]</th>
+            <th data-column="InsertDate" data-orderable="true" data-individual-search="true">@SharedLocalizer["InsertDate"]</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th>TicketNumber</th>
+            <th>Name</th>
+       
+            <th>FirmName</th>
+            <th>FirmUserName</th>
+            <th>InsertDate</th>
+        </tr>
+    </tfoot>
+</table>

@@ -1,0 +1,142 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.CreateTicketModel
+@{
+    ViewData["Title"] = "CreateTicket";
+}
+
+<form id="create-ticket-form" asp-controller="Tickets" asp-action="Create"
+      method="post" role="form" class="ajax-form" enctype="multipart/form-data" data-isModal="true">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">@SharedLocalizer["CreateTicket"]</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Firm"]</label>
+                        <select asp-for="FirmIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetFirms","General")" onchange="FirmChange()" data-selected="@Model.FirmIdx" style="width: 100%;"></select>
+                        @Html.ValidationMessageFor(x => x.FirmIdx)
+                    </div>
+                    <div class="form-group" id="FirmUsers" style="display:none">
+                        <label>@SharedLocalizer["FirmUsers"]</label>
+                        <select asp-for="FirmUserIdx" class="form-control select2" style="width: 100%;" data-selected="@Model.FirmUserIdx"></select>
+                        @Html.ValidationMessageFor(x => x.FirmUserIdx)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Subject"]</label>
+                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Name)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["RequestType"]</label>
+                        <select asp-for="TypeIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetTicketTypes","General")" data-selected="@Model.TypeIdx" style="width: 100%;"></select>
+                        @Html.ValidationMessageFor(x => x.TypeIdx)
+                    </div>
+
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Summary"]</label>
+                        @Html.TextBoxFor(x => x.Summary, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Summary)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Description"]</label>
+                        @Html.TextAreaFor(x => x.Description, new { @class = "form-control wysihtml5" })
+                        @Html.ValidationMessageFor(x => x.Description)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["Priority"]</label>
+                        <select asp-for="PriorityIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetPriorities","General")" data-selected="@Model.PriorityIdx" style="width: 100%;"></select>
+                        @Html.ValidationMessageFor(x => x.PriorityIdx)
+                    </div>
+                    <div class="form-group">
+                        <label>@SharedLocalizer["DocumentLinks"]</label>
+                        @Html.TextBoxFor(x => x.DocumentLinks, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.DocumentLinks)
+                    </div>
+
+                    <div class="file-loading">
+                        <input id="ticket-attachment" type="file" name="Attachments" data-browse-on-zone-click="true" data-show-upload="false" multiple>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-block btn-success btn-flat">@SharedLocalizer["Save"]</button>
+        </div>
+    </div>
+</form>
+<script>
+
+    $(".btn-warning").on('click', function () {
+        var $el = $("#file-4");
+        if ($el.attr('disabled')) {
+            $el.fileinput('enable');
+        } else {
+            $el.fileinput('disable');
+        }
+    });
+    $(".btn-info").on('click', function () {
+        $("#file-4").fileinput('refresh', { previewClass: 'bg-info' });
+    });
+    $(document).ready(function () {
+        $("#ticket-attachment").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '@Url.Action("UploadFiles","Tickets")',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            uploadAsync: false,
+           'showUpload': false,
+
+        });
+    });
+    function CreateTicket() {
+        var formdata = $('#create-ticket-form').serialize();
+
+
+        $.ajax({
+
+            type: 'POST',
+            url: '@Url.Action("Create", "Tickets")',
+            dataType: 'json',
+            data: formdata,
+            contentType: 'application/json; charset=utf-8',
+            success: function (xhr) {
+
+                alert(xhr.statusText);
+
+            }
+
+        })
+    }
+    function FirmChange() {
+        var firmIdx = $('#FirmIdx').val();
+               $('#FirmUserIdx')
+            .find('option')
+            .remove()
+            .end();
+        var url = '@Url.Action("GetTicketFirmUsers","General")?firmIdx=' + firmIdx;
+        var selectedUser = $('#FirmUserIdx').data().selected;
+         console.log(url);
+          $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    $('#FirmUserIdx').append(new Option(result[i].Value, result[i].Idx, result[i].Idx == selectedUser));                 
+                }
+                $('#FirmUserIdx').val(selectedUser);
+                $('#FirmUserIdx').trigger('change');
+            }
+                });
+           $('#FirmUsers').show();
+    }
+</script>

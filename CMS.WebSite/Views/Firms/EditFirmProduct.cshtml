@@ -1,0 +1,157 @@
+﻿@model CMS.Common.Models.ViewModels.Firms.FirmProductFieldsModel
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">@SharedLocalizer["Firm"] </h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+                <div class="form-group">
+                    <label>@SharedLocalizer["FirmName"]</label>
+                    @if (Model.FirmIdx == 0)
+                    {
+                        <select asp-for="FirmIdx" class="form-control select2-ajax-data" data-url="@Url.Action("GetFirms","General")" onchange="GetProductFields()" style="width: 100%;"></select>
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(r => r.FirmName, new { @class = "form-control", @readonly = "readonly" })
+                    }
+
+                </div>
+
+                <div class="form-group">
+                    <label>@SharedLocalizer["Product"]</label>
+                    @Html.TextBoxFor(r => r.ProductName, new { @class = "form-control" ,@readonly ="readonly"})
+                </div>
+
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">@SharedLocalizer["ProductFields"] </h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="productFields"></form>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <button type="button" onclick="SaveProductFields()" class="btn btn-block btn-success btn-flat">@SharedLocalizer["Save"]</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        debugger;
+        var productIdx = '@Model.ProductIdx';
+        var url = '@Url.Action("GetProductFields","General")?ProductIdx=' + productIdx;
+        var fillurl = '@Url.Action("GetFirmProductFields", "General")?FirmProductIdx='+ '@Model.FirmProductIdx';
+        GetProductFields(url,true,fillurl);
+       
+    });
+
+
+
+    function ValidationForm(formData) {
+        debugger;
+        var res = true;
+        formData.forEach(function (item) {
+            console.log($('#' + item.name).data())
+            var input = $('#' + item.name);
+            if ($(input).data().required) {
+                if ($(input).val() == null || $(input).val() == undefined || $(input).val() == '' ) {
+                    $(input).css("border", "1px solid red");
+                    res = false;
+                }
+            }
+        })
+        return res;
+    }
+
+    function SaveProductFields() {
+        var fields = new Array();
+        var formArray = $('#productFields').serializeArray();
+        if (!ValidationForm(formArray)) {
+            Swal.fire(
+                'Form Geçersiz',
+                'Formun zorunlu alanlarını doldurunuz',
+                'error'
+            );
+            return false;
+        }
+        formArray.forEach(function (item) {
+            var field = {
+                FieldIdx: item.name,
+                Value: item.value
+            };
+            fields.push(field);
+        });
+        console.log(fields);
+        var productIdx = $('#ProductIdx').val();
+        var model = {
+            FirmIdx : '@Model.FirmIdx',
+            ProductIdx: productIdx,
+            FirmProductIdx:'@Model.FirmProductIdx',
+            ProductFields : fields
+        };
+        console.log(model);
+        debugger;
+
+        $.ajax({
+            url: '@Url.Action("EditFirmProduct", "Firms")',
+            method: "post",
+            data: model,
+            success: function (resp) {
+                if (resp.Success) {
+                    Toast.fire({
+                        type: 'success',
+                        title: ("<h3>" + resp.Message + "</h3>")
+                    })
+                } else {
+                    Toast.fire({
+                        type: 'error',
+                        title: ("<h3>" + resp.Message + "</h3>")
+                    })
+                }
+            },
+            error: function (err) {
+                Toast.fire({
+                    type: 'error',
+                    title: ("<h3>" + resp.Message + "</h3>")
+                })
+            }
+        })
+    }
+</script>

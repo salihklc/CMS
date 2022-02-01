@@ -1,0 +1,138 @@
+﻿@model CMS.Common.Models.ViewModels.Firms.FirmsModel
+
+<form id="add-firms-form" asp-controller="Firms" asp-action="EditFirm"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["FirmName"]</label>
+                @Html.TextBoxFor(x => x.FirmName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.FirmName)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["TaxNo"]</label>
+                @Html.TextBoxFor(x => x.TaxNo, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.TaxNo)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["TcNo"]</label>
+                @Html.TextBoxFor(x => x.TcNo, new { @class = "form-control", @min = 11, @max = 11, @type = "number" })
+                @Html.ValidationMessageFor(x => x.TcNo)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Address"]</label>
+                @Html.TextAreaFor(x => x.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Address)
+            </div>
+            <div class="form-group">
+                <label>@SharedHtmlLocalizer["City"]</label>
+                <select asp-for="CityNo" class="form-control select2-ajax-data" data-url="@Url.Action("GetCitiesSelect","General")" data-selected="@Model.CityNo" style="width: 100%;"></select>
+                @Html.ValidationMessageFor(x => x.CityNo)
+            </div>
+            <div class="form-group">
+                <label>@SharedHtmlLocalizer["District"]</label>
+                <select asp-for="DistrictNo" class="form-control select2-ajax-data" data-url="@Url.Action("GetDistrictsSelect","General",new { cityNo = Model.CityNo})" data-selected="@Model.DistrictNo" style="width: 100%;"></select>
+                @Html.ValidationMessageFor(x => x.DistrictNo)
+            </div>
+
+            <div class="form-group">
+                <label>@SharedLocalizer["Gsm"]</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    @Html.TextBoxFor(x => x.Gsm, new { @class = "form-control", @data_inputmask = "'mask':'(999) 999-9999'" })
+
+                </div>
+                @Html.ValidationMessageFor(x => x.Gsm)
+            </div>
+
+            <div class="form-group">
+                <label>@SharedLocalizer["Gsm2"]</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    @Html.TextBoxFor(x => x.Gsm2, new { @class = "form-control", @data_inputmask = "'mask':'(999) 999-9999'" })
+
+                </div>
+                @Html.ValidationMessageFor(x => x.Gsm2)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Phone"]</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    @Html.TextBoxFor(x => x.Phone, new { @class = "form-control", @data_inputmask = "'mask':'(999) 999-9999'" })
+
+                </div>
+                @Html.ValidationMessageFor(x => x.Phone)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Phone2"]</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    @Html.TextBoxFor(x => x.Phone2, new { @class = "form-control", @data_inputmask = "'mask':'(999) 999-9999'" })
+
+                </div>
+                @Html.ValidationMessageFor(x => x.Phone2)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Email"]</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-mail-forward"></i>
+                    </div>
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+
+                </div>
+                @Html.ValidationMessageFor(x => x.Email)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["ContactName"]</label>
+                @Html.TextBoxFor(x => x.ContactName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.ContactName)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["ContactSurName"]</label>
+                @Html.TextBoxFor(x => x.ContactSurname, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.ContactSurname)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["WebSite"]</label>
+                @Html.TextBoxFor(x => x.Website, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Website)
+            </div>
+
+            <div class="form-group">
+                @Html.HiddenFor(x => x.InsertDate)
+                @Html.HiddenFor(x => x.InsertUserIdx)
+                @Html.HiddenFor(x => x.UpdateUserIdx)
+                @Html.HiddenFor(x => x.Idx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    function CityChange() {
+    $('#DistrictNo')
+        .find('option')
+        .remove()
+        .end();
+    $('#DistrictSelect').show();
+    var cityNo = $('#CityNo').val();
+    $.ajax({
+        type: 'GET',
+        url: "@Url.Action("GetDistricts" ,"General")/?cityNo=" +  cityNo,
+        success: function (resultData) {
+            debugger;
+            for (var i = 0; i < resultData.length; i++) {
+                $('#DistrictNo').append(new Option(resultData[i].DistrictName, resultData[i].DistrictNo));                          }
+        }
+    });
+}
+</script>

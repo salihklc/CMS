@@ -1,0 +1,172 @@
+﻿<!-- Content Header (Page header) -->
+
+<section class="content-header">
+    <h1>
+        @SharedLocalizer["MyTickets"]
+        <small>13 new tickets</small>
+    </h1>
+ 
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+         
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Folders</h3>
+
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active">
+                            <a href="#" class="ticketmenu" data-menuid="1" id="firstmenu">
+                                <i class="fa fa-inbox"></i> @SharedLocalizer["MyOpenIssues"]
+                                <span id="my-opened-issue-label" class="label label-primary pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="ticketmenu" data-menuid="2"><i class="fa fa-envelope">
+                            </i> @SharedLocalizer["ReportedByMe"] 
+                                <span id="reported-issue-label" class="hidden label label-primary pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="ticketmenu" data-menuid="3">
+                                <i class="fa fa-check-square"></i>@SharedLocalizer["MyDoneIssues"] 
+                                <span id="done-issue-label" class="hidden label label-success  pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="ticketmenu" data-menuid="4">
+                                <i class="fa fa-filter"></i> @SharedLocalizer["OpenIssues"] 
+                                <span id="opened-issue-label" class="hidden label label-warning pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="ticketmenu" data-menuid="5">
+                                <i class="fa fa-envelope-open"></i>@SharedLocalizer["AllIssues"]
+                                <span id="all-issue-label" class="hidden label label-default  pull-right"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+            </div>
+          
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+            <div class="row">
+
+                <div class="box">
+                    <div class="box-header"></div>
+                    <div class="box-body">
+                        <div id="datatable">
+
+                        </div>
+                    </div>
+                </div> <!-- ./ box -->
+              
+            </div> <!-- ./ row-->
+            
+            <!-- /. box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    @*<div class="row">
+        <div class="demo-container">
+            <div id="grid"></div>
+        </div>
+    </div>*@
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+<!-- Page Script -->
+<script>
+    $(function () {
+        $('#firstmenu').trigger('click');
+
+
+        //Enable check and uncheck all functionality
+        $(".checkbox-toggle").click(function () {
+            var clicks = $(this).data('clicks');
+            if (clicks) {
+                //Uncheck all checkboxes
+                $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+                $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+            } else {
+                //Check all checkboxes
+                $(".mailbox-messages input[type='checkbox']").iCheck("check");
+                $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+            }
+            $(this).data("clicks", !clicks);
+        });
+
+    });
+
+
+    $('.ticketmenu').on('click', function () {
+
+        var menuid = $(this).data("menuid");
+        $('.nav-stacked').find('li').removeClass('active');
+        $(this).parent().addClass('active');
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("TicketsDatatable","Tickets")/' + menuid,
+            success: function (resultData) {
+                $('#datatable').html('');
+                $('#datatable').html(resultData);
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                console.log(errorMessage);
+                if (xhr.status != 200) {
+                    CookieTimeOut();                  
+                }
+            }
+        });
+    });
+
+
+    setInterval(function(){
+        
+         $.ajax({
+             type:"GET",
+             url:'@Url.Action("GetTicketsCount","General")',
+             headers: { 'x-backgroup-task-header': 'true' },
+             success: function(resultData){              
+
+                $(".ticketmenu span").addClass("hidden");
+
+                if(resultData.OpenedIssueOnMeCount > 0)
+                $("#my-opened-issue-label").html(resultData.OpenedIssueOnMeCount).removeClass("hidden");
+
+                if(resultData.CreatedIssueByMeCount > 0)
+                $("#reported-issue-label").html(resultData.CreatedIssueByMeCount).removeClass("hidden");
+
+                if(resultData.ClosedIssueByMeCount > 0)
+                $("#done-issue-label").html(resultData.ClosedIssueByMeCount).removeClass("hidden");
+
+                if(resultData.OpenedAllIssueCount > 0)
+                $("#opened-issue-label").html(resultData.OpenedAllIssueCount).removeClass("hidden");
+
+                if(resultData.AllTicketsCount > 0)
+                $("#all-issue-label").html(resultData.AllTicketsCount).removeClass("hidden");
+        
+             },
+             error:function(){
+                $(".ticketmenu span").addClass("hidden");
+             }
+         })
+         
+    }, 5000);
+
+</script>

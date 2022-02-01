@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title> @SharedLocalizer["CompanyAndCrmName"] - @ViewData["AdminTitle"]</title>
+
+    @RenderSection("ExtensionCss", required: false)
+
+    @{Html.RenderPartial("~/Views/Shared/_HeadMainCss.cshtml");}
+    <script type="text/javascript" language="javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+        var logoutUrl = '@Url.Action("Logout","Account")';
+        function CreateTicketModal() {
+            debugger;
+            $.ajax({
+                type: 'GET',
+                url: "@Url.Action("Create","Tickets")",
+                success: function (resultData) {
+                    debugger;
+                    $('#modalBody').html(resultData);
+                    $('#myModal').modal();
+                    runwysihtml5();
+                    runSelect2inModal();
+                }
+            });
+        }
+    </script>
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
+
+        @{Html.RenderPartial("~/Views/Shared/_Header.cshtml");}
+
+        @{Html.RenderPartial("~/Views/Shared/_Sidebar.cshtml");}
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <!-- <section class="content-header">
+              <h1>
+                @(ViewData["PageName"] ?? "" )
+                <small>@(ViewData["PageNameDesc"] ?? "")</small>
+              </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li >Dashboard</li>
+              </ol>
+            </section> -->
+            <!-- Main content -->
+            <section class="content">
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        @{Html.RenderPartial("~/Views/Shared/Components/Modal/Modal.cshtml");}
+
+        @{Html.RenderPartial("~/Views/Shared/_Footer.cshtml");}
+
+    </div>
+
+    <script>
+      var activeMenuSelecter = '@ViewData["SelectedMenu"]';
+      var baseAdminPageUrl = "@Url.Content("~")";
+    </script>
+
+    @RenderSection("ExtensionJS", required: false)
+    @{Html.RenderPartial("~/Views/Shared/_FooterMainScripts.cshtml");}
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

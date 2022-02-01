@@ -1,0 +1,29 @@
+
+body{
+    font-family: 'Roboto', ;
+  }
+
+.user-panel > .image > img {
+    min-height: 40px;
+}
+
+.main-header .sidebar-toggle {
+    font-family: "Font Awesome\ 5 Free"; 
+}
+
+.swal2-popup {
+font-size: 1.4rem !important;
+}
+.grid-search-input {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+}

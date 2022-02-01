@@ -1,0 +1,76 @@
+﻿@model CMS.Common.Models.ViewModels.General.ExcelImportModel
+<form id="excel-import-form" asp-controller="General" asp-action="ExcelFileImport"
+      method="post" role="form" class="ajax-form" enctype="multipart/form-data" data-isModal="true">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">@SharedLocalizer["ExcelImport"]</h3>
+                    <div style="float:right;">
+                        <a class="btn btn-app pull-right" id="exampleExcel" href="@Model.ExampleExcelPath">
+                            <i class="fas fa-file-excel"></i> @SharedLocalizer["ExampleExcel"]
+                        </a>
+                    </div>
+                    <hr />
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="file-loading">
+                        <input id="kv-explorer" type="file" name="ExcelFile" data-browse-on-zone-click="true" data-show-upload="false">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        @Html.HiddenFor(r => r.ExampleExcelPath)
+        @Html.HiddenFor(r => r.PostExcelFileUrl)
+        @Html.HiddenFor(r => r.UploadExcelPath)
+        @Html.HiddenFor(r => r.ExtraData)
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-block btn-success btn-flat">@SharedLocalizer["Save"]</button>
+        </div>
+    </div>
+</form>
+<script>
+
+    $(".btn-warning").on('click', function () {
+        var $el = $("#file-4");
+        if ($el.attr('disabled')) {
+            $el.fileinput('enable');
+        } else {
+            $el.fileinput('disable');
+        }
+    });
+    $(".btn-info").on('click', function () {
+        $("#file-4").fileinput('refresh', { previewClass: 'bg-info' });
+    });
+    $(document).ready(function () {
+        $("#kv-explorer").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '@Model.PostExcelFileUrl',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+
+        });
+    });
+
+    function CreateTicket() {
+        var formdata = $('#create-ticket-form').serialize();
+
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create", "Tickets")',
+            dataType: 'json',
+            data: formdata,
+            contentType: 'application/json; charset=utf-8',
+            success: function (xhr) {
+                alert(xhr.statusText);
+            }
+        })
+    }
+</script>

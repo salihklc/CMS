@@ -1,0 +1,51 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketTypesModel
+
+
+<form id="add-logtime-form" asp-controller="Definition" asp-action="EditTicketTypes"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box-body">
+            <div class="form-group">
+                <label>@SharedLocalizer["Name_TR"]</label>
+                @Html.TextBoxFor(x => x.TicketTypeName_TR, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.TicketTypeName_TR)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Name_EN"]</label>
+                @Html.TextBoxFor(x => x.TicketTypeName_EN, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.TicketTypeName_EN)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Description_TR"]</label>
+                @Html.TextAreaFor(x => x.Description_TR, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Description_TR)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["Description_EN"]</label>
+                @Html.TextAreaFor(x => x.Description_EN, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Description_EN)
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["EstimatedTime"]</label>
+                <div class='input-group date'>
+                    <input type='number' asp-for="EstimatedTime" class="form-control" placeholder="@SharedHtmlLocalizer["Hour"]" min="0" step="0.01" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                    @Html.ValidationMessageFor(x => x.EstimatedTime)
+                </div>
+            </div>
+            <div class="form-group">
+                <label>@SharedLocalizer["RecommendedActions"]</label>
+                @Html.TextAreaFor(x => x.RecommendedActions, new { @class = "form-control wysihtml5" })
+                @Html.ValidationMessageFor(x => x.RecommendedActions)
+            </div>
+            <div class="form-group">
+                @Html.HiddenFor(x => x.Idx)
+                @Html.HiddenFor(x => x.InsertDate)
+                @Html.HiddenFor(x => x.InsertUserIdx)
+                <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+            </div>
+        </div>
+    </div>
+</form>

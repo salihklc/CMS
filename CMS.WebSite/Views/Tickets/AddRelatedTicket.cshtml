@@ -1,0 +1,25 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketRelatedIssues
+
+<form id="change-assignee-form" asp-controller="Tickets" asp-action="AddRelatedTicket"
+      method="post" role="form" class="ajax-form" data-isModal="true">
+    <div class="row">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">@SharedLocalizer["TicketRelated"]</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label>@SharedHtmlLocalizer["Tickets"]</label>
+                    <select asp-for="RelatedTicketIdx" class="form-control select2-ajax-data" 
+                            data-url="@Url.Action("GetRelatedTickets","General",new { ticketIdx= Model.TicketIdx})" style="width: 100%;"></select>
+                    @Html.ValidationMessageFor(x => x.RelatedTicket)
+                </div>
+                <div class="form-group">
+                    @Html.HiddenFor(x => x.TicketIdx)
+                    @Html.HiddenFor(x=> x.UserIdx)
+                    <button type="submit" class="btn btn-block btn-success">@SharedLocalizer["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

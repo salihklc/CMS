@@ -1,0 +1,201 @@
+﻿@model CMS.Common.Models.ViewModels.Tickets.TicketDetailsModel
+
+<div class="row">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="pull-left image">
+                <i class="fa fa-globe"></i> Ticket Firm
+            </div>
+        </div>
+        <div class="col-md-4">
+            @Model.TicketHeader.TicketHeader.Name
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Comment_Ticket).AuthorizeUser)
+            {
+                <a class="btn btn-default" href="#" onclick="AddTicketComment()">
+                    <i class="fa fa-comments"></i>  @SharedLocalizer["Comment"]
+                </a>
+            }
+
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Assignee_Ticket).AuthorizeUser)
+            {
+                <a class="btn btn-default" onclick="ChangeTicketAssignee()">
+                    <i class="fa fa-users"></i>
+                    @SharedLocalizer["ChangeAssignee"]
+                </a>
+            }
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.ChangeState_Ticket).AuthorizeUser)
+            {
+                <a class="btn  btn-default" onclick="ChangeTicketState()">
+                    <i class="fa fa-exchange-alt"></i>
+                    @SharedLocalizer["ChangeState"]
+                </a>
+            }
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.LogTime_Ticket).AuthorizeUser)
+            {
+                <a class="btn  btn-default" onclick="AddTicketLogTimes()">
+                    <i class="fa fa-hourglass-half"></i>
+                    @SharedLocalizer["LogTime"]
+                </a>
+            }
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Reopen_Ticket).AuthorizeUser)
+            {
+                <a class="btn  btn-default" onclick="ReopenTicket()">
+                    <i class="fa fa-refresh"></i>
+                    @SharedLocalizer["ReopenTicket"]
+                </a>
+            }
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.ChangeDescription_Ticket).AuthorizeUser)
+            {
+                <a class="btn  btn-default" onclick="ChangeDescription()">
+                    <i class="fa fa-text-width"></i>
+                    @SharedLocalizer["ChangeDescription"]
+                </a>
+            }
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.ChangeLabel_Ticket).AuthorizeUser)
+            {
+                <a class="btn  btn-default" onclick="ChangeTicketLabels()">
+                    <i class="fa  fa-tags"></i>
+                    @SharedLocalizer["ChangeTicketLabels"]
+                </a>
+            }
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Change_TicketInfos).AuthorizeUser)
+            {
+                <a class="btn  btn-default" onclick="ChangeTicketInfos()">
+                    <i class="fa  fa-tags"></i>
+                    @SharedLocalizer["ChangeTicketInfos"]
+                </a>
+            }
+            @if (Model.TicketHeader.Permissions.FirstOrDefault(r => r.PermissionNo == (int)CMS.Common.AppConstants.Permissions.Create_TicketWatchers).AuthorizeUser)
+            {
+                <a class="btn  btn-default" onclick="AddWatcher()">
+                    <i class="fa  fa-tags"></i>
+                    @SharedLocalizer["AddTicketWatcher"]
+                </a>
+            }
+            <a class="btn  btn-default" onclick="window.print()">
+                <i class="fas fa-print"></i>
+                @SharedLocalizer["Print"]
+            </a>
+        </div>
+
+    </div>
+    <hr />
+</div>
+
+<div class="row">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title">@SharedLocalizer["Details"]</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-4">@SharedLocalizer["TicketType"]</label>
+                        <span>@Model.TicketTypes.TicketTypeName_TR</span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">@SharedLocalizer["Priority"]</label>
+                        <span class="label label-danger">@Model.Priorities.Name_TR</span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">@SharedLocalizer["Labels"]</label>
+
+                        @foreach (var label in Model.TicketLabels)
+                        {
+                            <span class="@label.Class">@label.Name_TR</span>
+                        }
+
+
+                    </div>
+                  
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-4">@SharedLocalizer["Status"]</label>
+                        <span class="label label-info">@Model.TicketStatus.StatusName_TR</span>
+                    </div>
+                    <div class="form-group">
+                       <label class="col-md-4">@SharedLocalizer["EstimatedTime"]</label>
+                        <span class="label label-info">@Model.TicketHeader.TicketHeader.EstimatedTime  @SharedLocalizer["Hours"]<span class="glyphicon glyphicon-time"></span></span>
+                    </div>
+                  
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title">@SharedLocalizer["Description"]</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.Raw(Model.TicketHeader.TicketHeader.Description)
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function AddTicketComment() {
+        var url = '@Url.Action("AddTicketComment","Tickets",new { Id = Model.TicketIdx })';
+        OpenModal(url);
+    }
+
+    function AddTicketLogTimes() {
+        var url = '@Url.Action("AddTicketLogTimes","Tickets", new { Id = Model.TicketIdx})';
+       OpenModal(url);
+    }
+
+    function ChangeTicketAssignee() {
+        var url = '@Url.Action("ChangeAssigneeUserIdx","Tickets", new { Id = Model.TicketIdx})';
+        OpenModal(url);
+
+    }
+
+    function ChangeTicketState() {
+        var url = '@Url.Action("ChangeTicketState","Tickets", new { Id = Model.TicketIdx})';
+        OpenModal(url);
+
+    }
+    function ChangeDescription() {
+        var url =  '@Url.Action("ChangeTicketDescription","Tickets", new { Id = Model.TicketIdx})';
+        OpenModal(url);
+
+    }
+
+    function ReopenTicket() {
+         var url =  '@Url.Action("ReOpenTicket","Tickets", new { Id = Model.TicketIdx})';
+        OpenModal(url);
+    }
+
+     function ChangeTicketLabels() {
+         var url =  '@Url.Action("ChangeLabelTicket","Tickets", new { Id = Model.TicketIdx})';
+        OpenModal(url);
+    }
+    function ChangeTicketInfos() {
+         var url =  '@Url.Action("ChangeTicketInfos","Tickets", new { Id = Model.TicketIdx})';
+        OpenModal(url);
+    }
+    function AddWatcher() {
+            var url ='@Url.Action("AddTicketWatcher", "Tickets", new { Id = Model.TicketIdx })';
+            OpenModal(url);
+    }
+
+</script>
