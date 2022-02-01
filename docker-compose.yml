@@ -1,0 +1,40 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  
+  website:
+    build: 
+      context: .
+      dockerfile: .website.dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  api:
+    build:
+      context: .
+      dockerfile: ./.api.dockerfile
+    ports:
+      - "6000:6000"
+    depends_on:
+      - db
+  
+  taskmanager:
+    build: 
+      context: .
+      dockerfile: .taskmanager.dockerfile
+    depends_on:
+      - db
