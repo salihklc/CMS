@@ -60,7 +60,7 @@ namespace CMS.WebSite.StartupExtensions
                 })
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Always;
+                    //options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Always;
                     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
