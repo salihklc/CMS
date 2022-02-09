@@ -50,6 +50,7 @@ namespace CMS.WebSite.StartupExtensions
                     {
                         options.Filters.Add(typeof(CustomExceptionFilterAttribute));
                         options.Filters.Add(typeof(ViewBagFilter));
+                        options.EnableEndpointRouting = false;
                     }
                 ).ConfigureApiBehaviorOptions(options => { options.SuppressInferBindingSourcesForParameters = true; })
                 .AddViewLocalization()

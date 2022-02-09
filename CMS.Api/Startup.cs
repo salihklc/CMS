@@ -35,8 +35,7 @@ namespace CMS.Api
             services.AddCustomDependencies();
             services.AddCustomDatabaseContext(Configuration, CurrentEnvironment);
             services.AddCustomConfiguration(Configuration, CurrentEnvironment);
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options => options.EnableEndpointRouting = false);
 
             //Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
             //Serilog.Debugging.SelfLog.Enable(Console.Error);

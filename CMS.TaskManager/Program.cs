@@ -106,7 +106,7 @@ namespace CMS.TaskManager
                     var applicationSettings = Configuration.GetSection("ApplicationConfig");
                     services.Configure<ApplicationConfig>(applicationSettings);
                     
-                    services.AddDbContext<CmsDbContext>(options => options.UseSqlServer(cnnString), ServiceLifetime.Transient);
+                    services.AddDbContext<CmsDbContext>(options => options.UseNpgsql(cnnString), ServiceLifetime.Transient);
 
                     services.AddHostedService<Worker>();
                 })

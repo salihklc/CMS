@@ -18,7 +18,7 @@ namespace CMS.WebSite.StartupExtensions
                 logCnnString = logCnnString; //şifre çözme gibi işlem yapılabilir.
             
             service.AddDbContext<CmsLogDbContext>(options =>
-                options.UseSqlServer(logCnnString), ServiceLifetime.Scoped);
+                options.UseNpgsql(logCnnString), ServiceLifetime.Scoped);
 
 
 
@@ -28,7 +28,7 @@ namespace CMS.WebSite.StartupExtensions
                 cnnString = cnnString; //şifre çözme gibi işlem yapılabilir.
 
             service.AddDbContext<CmsDbContext>(options =>
-                options.UseSqlServer(cnnString), ServiceLifetime.Scoped);
+                options.UseNpgsql(cnnString), ServiceLifetime.Scoped);
 
 
             return service;

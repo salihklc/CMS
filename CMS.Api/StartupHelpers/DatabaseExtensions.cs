@@ -17,9 +17,8 @@ namespace CMS.Api.StartupHelpers
             if (!env.IsDevelopment())
                 cnnString = cnnString; //şifre çözme gibi işlem yapılabilir.
             service.AddScoped<DbContext, CmsDbContext>();
-
             service.AddDbContext<CmsDbContext>(options =>
-                options.UseSqlServer(cnnString), ServiceLifetime.Scoped);
+                options.UseNpgsql(cnnString), ServiceLifetime.Scoped);
 
             return service;
         }

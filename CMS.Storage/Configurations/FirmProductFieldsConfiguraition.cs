@@ -14,8 +14,6 @@ namespace CMS.Storage.Configurations
             builder.ToTable("FirmProductFields", "product");
             builder.HasKey(r => new { r.ProductFieldIdx, r.FirmProductIdx });
             builder.Property(k => k.Idx).ValueGeneratedOnAdd();
-            builder.Property(k => k.Idx).UseSqlServerIdentityColumn();
-            builder.Property(p => p.Idx).Metadata.AfterSaveBehavior = Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore;
             builder.HasOne(r => r.ProductFields).WithMany(r => r.FirmProductFields).HasForeignKey(r => r.ProductFieldIdx);
             builder.HasOne(r => r.FirmProducts).WithMany(r => r.FirmProductFields).HasForeignKey(r => r.FirmProductIdx);
         }
