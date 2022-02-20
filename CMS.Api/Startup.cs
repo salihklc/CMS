@@ -39,8 +39,6 @@ namespace CMS.Api
 
             //Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
             //Serilog.Debugging.SelfLog.Enable(Console.Error);
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

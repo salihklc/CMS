@@ -8,16 +8,16 @@
 <div class="login-box">
     <div class="login-logo">
         <img src="~/img/logo/cms.png" />
-        <b>My Cms</b>
+        <b>cMs</b>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">@SharedLocalizer["SignInToStartYourSession"]</p>
-      
+
         <form asp-action="Index" asp-controller="Account" method="post" id="accountForm">
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
             <div class="form-group has-feedback">
-               
+
                 <input asp-for="Email" type="email" class="form-control" placeholder="@SharedLocalizer["Email"]">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>

@@ -25,25 +25,23 @@ namespace CMS.WebSite.StartupExtensions
 
             var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+            builder = new ConfigurationBuilder()
+                .SetBasePath(pathToContentRoot)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
             if (envName == "Development")
             {
-                builder = new ConfigurationBuilder()
-                .SetBasePath(pathToContentRoot)
-                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+                builder = builder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
             }
 
             if (envName == "Production")
             {
-                builder = new ConfigurationBuilder()
-                .SetBasePath(pathToContentRoot)
-                .AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true);
+                builder = builder.AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true);
             }
 
             if (envName == "Test")
             {
-                builder = new ConfigurationBuilder()
-                .SetBasePath(pathToContentRoot)
-                .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true);
+                builder = builder.AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true);
             }
 
 

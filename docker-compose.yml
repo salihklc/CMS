@@ -6,16 +6,18 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: cms.123
+    ports:
+      - 5432:5432
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
-  
+
   website:
-    build: 
+    build:
       context: .
       dockerfile: .website.dockerfile
     ports:
@@ -31,9 +33,9 @@ services:
       - "6000:6000"
     depends_on:
       - db
-  
+
   taskmanager:
-    build: 
+    build:
       context: .
       dockerfile: .taskmanager.dockerfile
     depends_on:

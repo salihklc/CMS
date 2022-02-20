@@ -12,7 +12,7 @@ namespace CMS.WebSite.StartupExtensions
         public static IServiceCollection AddCustomDatabaseContext(this IServiceCollection service, IConfiguration Configuration, IHostingEnvironment env)
         {
 
-            string logCnnString = Configuration.GetConnectionString("CmsLogDatabase");
+            string logCnnString = Configuration.GetConnectionString("cms-log;Database");
 
             if (!env.IsDevelopment())
                 logCnnString = logCnnString; //şifre çözme gibi işlem yapılabilir.
